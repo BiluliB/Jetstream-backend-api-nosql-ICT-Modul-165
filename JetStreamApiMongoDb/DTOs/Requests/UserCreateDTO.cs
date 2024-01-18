@@ -14,7 +14,6 @@ namespace JetStreamApiMongoDb.DTOs.Requests
         public string? Password { get; set; }
 
         [Required]
-        [MaxLength(50)]
         public Roles Role { get; set; }
     }
 }

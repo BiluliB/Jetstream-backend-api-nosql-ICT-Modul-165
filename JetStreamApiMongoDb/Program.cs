@@ -1,4 +1,5 @@
 
+using JetStreamApiMongoDb.Common;
 using JetStreamApiMongoDb.Data;
 using JetStreamApiMongoDb.Interfaces;
 using JetStreamApiMongoDb.Models;
@@ -9,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Serilog;
+using System.Linq;
 using System.Text;
 
 namespace JetStreamApiMongoDb
@@ -34,6 +36,8 @@ namespace JetStreamApiMongoDb
 
             // Add services to the container.
             builder.Services.AddScoped<IOrderSubmissionService, OrderSubmissionService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -109,33 +113,44 @@ namespace JetStreamApiMongoDb
             using var scope = serviceProvider.CreateScope();
             var scopedServices = scope.ServiceProvider;
             var dbContext = scopedServices.GetRequiredService<IMongoDbContext>();
+            var userService = scopedServices.GetRequiredService<IUserService>();
 
-            if (!await dbContext.Priorities.Any() && !await dbContext.Services.Any() && !await dbContext.Statuses.Any() && !await dbContext.OrderSubmissions.Any())
+            if (!await dbContext.Users.Any() && !await dbContext.Priorities.Any() && !await dbContext.Services.Any() && !await dbContext.Statuses.Any() && !await dbContext.OrderSubmissions.Any())
             {
+
+                await userService.CreateUserAsync("admin", "Password", Roles.ADMIN);
+                await userService.CreateUserAsync("admin1", "Password1", Roles.ADMIN);
+                await userService.CreateUserAsync("user", "Password", Roles.USER);
+
+                for (int i = 1; i <= 10; i++)
+                {
+                    await userService.CreateUserAsync($"user{i}", $"Password{i}", Roles.USER);
+                }
+
                 var priorities = await dbContext.Priorities.SeedDatabase(new List<Priority>
-        {
-            new () { Name = "Tief", Price = 0 },
-            new () { Name = "Standard", Price = 5 },
-            new () { Name = "Hoch", Price = 10 }
-        });
+            {
+                new () { Name = "Tief", Price = 0 },
+                new () { Name = "Standard", Price = 5 },
+                new () { Name = "Hoch", Price = 10 }
+            });
 
                 var services = await dbContext.Services.SeedDatabase(new List<Service>
-        {
-            new () { Name = "Kleiner Service", Price = 49 },
-            new () { Name = "Grosser Service", Price = 69 },
-            new () { Name = "Rennskiservice", Price = 99 },
-            new () { Name = "Bindung montieren und einstellen", Price = 39 },
-            new () { Name = "Fell zuschneiden", Price = 25 },
-            new () { Name = "Heisswachsen", Price = 18 }
-        });
+            {
+                new () { Name = "Kleiner Service", Price = 49 },
+                new () { Name = "Grosser Service", Price = 69 },
+                new () { Name = "Rennskiservice", Price = 99 },
+                new () { Name = "Bindung montieren und einstellen", Price = 39 },
+                new () { Name = "Fell zuschneiden", Price = 25 },
+                new () { Name = "Heisswachsen", Price = 18 }
+            });
 
                 var statuses = await dbContext.Statuses.SeedDatabase(new List<Status>
-        {
-            new () { Name = "Offen" },
-            new () { Name = "In Arbeit" },
-            new () { Name = "Abgeschlossen" },
-            new () { Name = "Storniert" }
-        });
+            {
+                new () { Name = "Offen" },
+                new () { Name = "In Arbeit" },
+                new () { Name = "Abgeschlossen" },
+                new () { Name = "Storniert" }
+            });
 
                 var offenStatusList = await dbContext.Statuses.FindWithProxies(Builders<Status>.Filter.Eq(s => s.Name, "Offen"));
                 var offenStatus = offenStatusList.FirstOrDefault();
@@ -145,34 +160,34 @@ namespace JetStreamApiMongoDb
                 }
                 var offenStatusId = offenStatus.Id;
 
-                var firstnames = new List<string> 
+                var firstnames = new List<string>
                 {
-                    "Max", "Anna", "John", "Jane", "Peter", "Paula", "Tom", "Tina", "Robert", "Rebecca", 
-                    "Martin", "Emily", "Daniel", "Sophia", "David", "Olivia", "Michael", "Isabella", "James", "Mia" 
+                    "Max", "Anna", "John", "Jane", "Peter", "Paula", "Tom", "Tina", "Robert", "Rebecca",
+                    "Martin", "Emily", "Daniel", "Sophia", "David", "Olivia", "Michael", "Isabella", "James", "Mia"
                 };
-                var lastnames = new List<string> 
-                { 
-                    "Mustermann", "Musterfrau", "Doe", "Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", 
-                    "Garcia", "Rodriguez", "Wilson", "Martinez", "Anderson", "Taylor", "Thomas", "Hernandez", "Moore", "Martin" 
-                };
-
-                var emails = new List<string> 
-                { 
-                    "max.mustermann@example.com", "anna.musterfrau@example.com", "john.doe@example.com", "jane.doe@example.com", 
-                    "peter.parker@example.com", "paula.paulsen@example.com", "tom.thompson@example.com", "tina.turner@example.com", 
-                    "robert.robertson@example.com", "rebecca.richards@example.com", "martin.martinson@example.com", "emily.elliot@example.com", 
-                    "daniel.davison@example.com", "sophia.simpson@example.com", "david.dickinson@example.com", "olivia.olson@example.com", 
-                    "michael.michaels@example.com", "isabella.isaacson@example.com", "james.jacobson@example.com", "mia.morrison@example.com" 
-                };
-                
-                var phones = new List<string> 
-                { 
-                    "012 345 67 89", "023 456 78 90", "034 567 89 01", "045 678 90 12", "056 789 01 23", "067 890 12 34", "078 901 23 45", 
-                    "089 012 34 56", "090 123 45 67", "101 234 56 78", "112 345 67 89", "123 456 78 90", "134 567 89 01", "145 678 90 12", 
-                    "156 789 01 23", "167 890 12 34", "178 901 23 45", "189 012 34 56", "190 123 45 67", "201 234 56 78" 
+                var lastnames = new List<string>
+                {
+                    "Mustermann", "Musterfrau", "Doe", "Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis",
+                    "Garcia", "Rodriguez", "Wilson", "Martinez", "Anderson", "Taylor", "Thomas", "Hernandez", "Moore", "Martin"
                 };
 
-                var comments = new List<string> 
+                var emails = new List<string>
+                {
+                    "max.mustermann@example.com", "anna.musterfrau@example.com", "john.doe@example.com", "jane.doe@example.com",
+                    "peter.parker@example.com", "paula.paulsen@example.com", "tom.thompson@example.com", "tina.turner@example.com",
+                    "robert.robertson@example.com", "rebecca.richards@example.com", "martin.martinson@example.com", "emily.elliot@example.com",
+                    "daniel.davison@example.com", "sophia.simpson@example.com", "david.dickinson@example.com", "olivia.olson@example.com",
+                    "michael.michaels@example.com", "isabella.isaacson@example.com", "james.jacobson@example.com", "mia.morrison@example.com"
+                };
+
+                var phones = new List<string>
+                {
+                    "012 345 67 89", "023 456 78 90", "034 567 89 01", "045 678 90 12", "056 789 01 23", "067 890 12 34", "078 901 23 45",
+                    "089 012 34 56", "090 123 45 67", "101 234 56 78", "112 345 67 89", "123 456 78 90", "134 567 89 01", "145 678 90 12",
+                    "156 789 01 23", "167 890 12 34", "178 901 23 45", "189 012 34 56", "190 123 45 67", "201 234 56 78"
+                };
+
+                var comments = new List<string>
                 {
                     "Bitte die Skier gut wachsen, ich fahre am Wochenende in die Berge.", "Ich brauche die Skier bis Freitag.",
                     "Bitte die Bindung auf meine neue Schuhgröße einstellen.", "Die Kanten meiner Skier sind sehr stumpf, bitte schärfen.",
@@ -207,16 +222,17 @@ namespace JetStreamApiMongoDb
                         Email = emails[i],
                         Phone = phones[i],
                         PriorityId = randomPriorityId,
-                        CreateDate = DateTime.Now.AddDays(rnd.Next(1,5)),
-                        PickupDate = DateTime.Now.AddDays(rnd.Next(1,20)),
+                        CreateDate = DateTime.Now.AddDays(rnd.Next(1, 5)),
+                        PickupDate = DateTime.Now.AddDays(rnd.Next(1, 20)),
                         ServiceId = randomServiceId,
                         StatusId = offenStatusId,
                         TotalPrice_CHF = totalPrice,
                         Comment = comments[i]
                     });
                 }
-                await dbContext.OrderSubmissions.SeedDatabase(orderSubmissions);            
+                await dbContext.OrderSubmissions.SeedDatabase(orderSubmissions);
             }
         }
     }
 }
+

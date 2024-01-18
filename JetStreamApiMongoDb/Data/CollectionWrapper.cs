@@ -75,6 +75,12 @@ namespace JetStreamApiMongoDb.Data
             await _collection.InsertOneAsync(entity);
         }
 
+        public async Task<T> FindByUsernameAsync(string username)
+        {
+            var result = await FindWithProxies(Builders<T>.Filter.Eq("name", username));
+            return result.FirstOrDefault();
+        }
+
         public async Task<T> FindByIdAsync(ObjectId id)
         {
             var result = await FindWithProxies(Builders<T>.Filter.Eq("_id", id));
@@ -89,6 +95,6 @@ namespace JetStreamApiMongoDb.Data
         public async Task DeleteOneAsync(ObjectId id)
         {
             await _collection.DeleteOneAsync(x => x.Id == id);
-        }   
+        }
     }
 }

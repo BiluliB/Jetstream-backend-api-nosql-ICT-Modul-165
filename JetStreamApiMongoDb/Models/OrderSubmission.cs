@@ -16,7 +16,7 @@ namespace JetStreamApiMongoDb.Models
             ("priorities", "priority"),
             ("services", "service"),
             ("statuses", "status"),
-            //("users", "user")
+            ("users", "user")
         };        
 
         [BsonElement("firstname")]

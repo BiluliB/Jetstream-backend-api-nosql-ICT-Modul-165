@@ -19,11 +19,14 @@ namespace JetStreamApiMongoDb.Common
             CreateMap<OrderSubmission, OrderSubmissionUpdateDTO>();
             CreateMap<OrderSubmissionUpdateDTO, OrderSubmission>();
 
-            CreateMap<User, UserCreateDTO>();
-            CreateMap<UserCreateDTO, User>();
+            CreateMap<User, UserLoginDTO>();
+            CreateMap<UserLoginDTO, User>();
 
             CreateMap<User, UserLoginDTO>();
             CreateMap<UserLoginDTO, User>();
+
+            CreateMap<User, UserUnlockDTO>();
+            CreateMap<UserUnlockDTO, User>();
 
             CreateMap<Priority, PriorityDTO>();
             CreateMap<Service, ServiceDTO>();
