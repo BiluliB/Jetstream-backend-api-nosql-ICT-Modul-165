@@ -7,6 +7,8 @@ namespace JetStreamApiMongoDb.Models
     {
         public static List<(string, string)> foreignKeys = new();
 
+        //public bool ShouldSerializeforeignKeys() => false;
+
         [BsonId]
         public ObjectId Id { get; set; }
     }

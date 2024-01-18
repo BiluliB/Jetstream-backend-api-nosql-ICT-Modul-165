@@ -6,11 +6,9 @@ namespace JetStreamApiMongoDb.Interfaces
     public interface IMongoDbContext
     {
         CollectionWrapper<Priority> Priorities { get; }
-        CollectionWrapper<ServiceRequest> ServiceRequests { get; }
+        CollectionWrapper<OrderSubmission> OrderSubmissions { get; }
         CollectionWrapper<Service> Services { get; }
         CollectionWrapper<Status> Statuses { get; }
         CollectionWrapper<User> Users { get; }
-
-        Task SeedDatabase();
     }
 }

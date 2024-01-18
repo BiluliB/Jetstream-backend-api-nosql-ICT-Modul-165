@@ -21,50 +21,31 @@ namespace JetStreamApiMongoDb.Data
             var client = new MongoClient(url);
             _database = client.GetDatabase(database);
 
-            SeedDatabase().Wait();
+            //SeedDatabase().Wait();
         }
-        public CollectionWrapper<ServiceRequest> ServiceRequests => new(_mapper, _database, "service_requests");
+        public CollectionWrapper<OrderSubmission> OrderSubmissions => new(_mapper, _database, "order_submissions");
         public CollectionWrapper<User> Users => new(_mapper, _database, "users");
         public CollectionWrapper<Service> Services => new(_mapper, _database, "services");
         public CollectionWrapper<Status> Statuses => new(_mapper, _database, "statuses");
         public CollectionWrapper<Priority> Priorities => new(_mapper, _database, "priorities");
 
-        public async Task SeedDatabase()
+        public CollectionWrapper<T> Get<T>() 
+            where T : BaseModel
         {
-            if (!await Priorities.Any())
+            var propertyInfo = GetType()
+                .GetProperties()
+                .FirstOrDefault(p => p.PropertyType == typeof(CollectionWrapper<T>));
+            if (propertyInfo != null)
             {
-                var priorities = await Priorities.SeedDatabase(new List<Priority>
-                {
-                    new () { Name = "Tief", Price = 0 },
-                    new () { Name = "Standard", Price = 5 },
-                    new () { Name = "Hoch", Price = 10 }
-                });
+                return (CollectionWrapper<T>)propertyInfo.GetValue(this)!;
             }
-
-            if (!await Services.Any())
-            { 
-            var services = await Services.SeedDatabase(new List<Service>
+            else
             {
-                    new () { Name = "Kleiner Service", Price = 49 },
-                    new () { Name = "Grosser Service", Price = 69 },
-                    new () { Name = "Rennskiservice", Price = 99 },
-                    new () { Name = "Bindung montieren und einstellen", Price = 39 },
-                    new () { Name = "Fell zuschneiden", Price = 25 },
-                    new () { Name = "Heißwachsen", Price = 18 }
-                });
-            }
-
-            if (!await Statuses.Any())
-            { 
-            var statuses = await Statuses.SeedDatabase(new List<Status>
-            {
-                    new () { Name = "Offen" },
-                    new () { Name = "In Arbeit" },
-                    new () { Name = "Abgeschlossen" },
-                    new () { Name = "Storniert" }
-                });
+                throw new InvalidOperationException($"No collection wrapper found for type {typeof(T).Name}");
             }
         }
+
+        
     }
 
 

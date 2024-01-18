@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using JetStreamApiMongoDb.Common;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -8,15 +9,14 @@ namespace JetStreamApiMongoDb.Models
     /// <summary>
     /// Model for a service request
     /// </summary>
-    public class ServiceRequest : BaseModel
+    public class OrderSubmission : BaseModel
     {
-
         public new List<(string, string)> foreignKeys = new()
         {
             ("priorities", "priority"),
             ("services", "service"),
             ("statuses", "status"),
-            ("users", "user")
+            //("users", "user")
         };        
 
         [BsonElement("firstname")]
@@ -36,9 +36,10 @@ namespace JetStreamApiMongoDb.Models
         public required string Phone { get; set; }
 
         [BsonElement("priority_id")]
-        public required string PriorityId { get; set; }
+        public required ObjectId PriorityId { get; set; }
 
         [BsonElement("priority")]
+        [Proxy("priorities", "priority_id")]
         public virtual Priority Priority { get; set; }
 
         public bool ShouldSerializePriority() => false;
@@ -50,9 +51,10 @@ namespace JetStreamApiMongoDb.Models
         public DateTime PickupDate { get; set; }
 
         [BsonElement("service_id")]
-        public required string ServiceId { get; set; }
+        public required ObjectId ServiceId { get; set; }
 
         [BsonElement("service")]
+        [Proxy("services", "service_id")]
         public virtual Service Service { get; set; }
 
         public bool ShouldSerializeService() => false;
@@ -61,9 +63,10 @@ namespace JetStreamApiMongoDb.Models
         public decimal TotalPrice_CHF { get; set; }
 
         [BsonElement("status_id")]
-        public required string StatusId { get; set; }
+        public required ObjectId StatusId { get; set; }
 
         [BsonElement("status")]
+        [Proxy("statuses", "status_id")]
         public virtual Status Status { get; set; }
 
         public bool ShouldSerializeStatus() => false;
@@ -73,9 +76,10 @@ namespace JetStreamApiMongoDb.Models
         public string? Comment { get; set; }
 
         [BsonElement("user_id")]
-        public string? UserId { get; set; }
+        public ObjectId? UserId { get; set; }
 
         [BsonElement("user")]
+        [Proxy("users", "user_id")]
         public virtual User? User { get; set; }
 
         public bool ShouldSerializeUser() => false;
