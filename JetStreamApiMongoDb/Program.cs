@@ -2,6 +2,7 @@
 using JetStreamApiMongoDb.Common;
 using JetStreamApiMongoDb.Data;
 using JetStreamApiMongoDb.Interfaces;
+using JetStreamApiMongoDb.Middleware;
 using JetStreamApiMongoDb.Models;
 using JetStreamApiMongoDb.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,7 +39,6 @@ namespace JetStreamApiMongoDb
             builder.Services.AddScoped<IOrderSubmissionService, OrderSubmissionService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IOrderAssignmentService, OrderAssignmentService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -96,6 +96,8 @@ namespace JetStreamApiMongoDb
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 

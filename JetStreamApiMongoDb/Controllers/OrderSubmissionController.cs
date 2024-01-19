@@ -1,6 +1,7 @@
 ﻿using JetStreamApiMongoDb.DTOs.Requests;
 using JetStreamApiMongoDb.DTOs.Responses;
 using JetStreamApiMongoDb.Interfaces;
+using JetStreamApiMongoDb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -145,6 +146,40 @@ namespace JetStreamApiMongoDb.Controllers
             catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // POST api/orderassignment
+        [HttpPost("{orderSubmissionId}/assign/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AssignOrderSubmissionToUser(string orderSubmissionId, string userId)
+        {
+            try
+            {
+                await _orderSubmissionService.AssignOrderSubmissionToUser(orderSubmissionId, userId);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        // PUT api/orderassignment/{orderSubmissionId}/user/{userId}
+        [HttpPut("{orderSubmissionId}/user/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateOrderSubmission(string orderSubmissionId, string userId)
+        {
+            try
+            {
+                await _orderSubmissionService.UpdateOrderSubmission(orderSubmissionId, userId);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }
