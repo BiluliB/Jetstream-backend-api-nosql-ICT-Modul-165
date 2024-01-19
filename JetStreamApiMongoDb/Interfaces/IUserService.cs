@@ -1,5 +1,7 @@
 ﻿using JetStreamApiMongoDb.Common;
+using JetStreamApiMongoDb.DTOs.Responses;
 using JetStreamApiMongoDb.Models;
+using MongoDB.Bson;
 
 namespace JetStreamApiMongoDb.Interfaces
 {
@@ -8,9 +10,12 @@ namespace JetStreamApiMongoDb.Interfaces
     /// </summary>
     public interface IUserService
     {
-        Task CreateUserAsync(string username, string password, Roles role);
-        Task<bool> AuthenticateAsync(string username, string password);
-        Task UnlockUserAsync(string username);
-        Task<User> GetUserByUsernameAsync(string userName);
+        Task CreateUser(string username, string password, Roles role);
+        Task<List<UserDTO>> GetAll();
+        Task<UserDTO> GetById(string id);
+        Task Delete(ObjectId id);
+        Task<bool> Authenticate(string username, string password);
+        Task UnlockUser(string username);
+        Task<User> GetUserByUsername(string userName);
     }
 }

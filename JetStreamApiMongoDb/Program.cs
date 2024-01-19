@@ -1,17 +1,11 @@
-
-using JetStreamApiMongoDb.Common;
 using JetStreamApiMongoDb.Data;
 using JetStreamApiMongoDb.Interfaces;
 using JetStreamApiMongoDb.Middleware;
-using JetStreamApiMongoDb.Models;
 using JetStreamApiMongoDb.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using Serilog;
-using System.Linq;
 using System.Text;
 
 namespace JetStreamApiMongoDb
@@ -41,6 +35,7 @@ namespace JetStreamApiMongoDb
             builder.Services.AddScoped<ITokenService, TokenService>();
 
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
@@ -109,7 +104,7 @@ namespace JetStreamApiMongoDb
             await DatabaseSeeder.SeedDatabase(app.Services);
 
             app.Run();
-        }        
+        }
     }
 }
 

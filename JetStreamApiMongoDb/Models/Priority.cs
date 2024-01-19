@@ -1,5 +1,4 @@
-﻿using JetStreamApiMongoDb.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,8 +9,6 @@ namespace JetStreamApiMongoDb.Models
     /// </summary>
     public class Priority : BaseModel
     {
-        
-
         [BsonElement("name")]
         [MaxLength(50)]
         public string Name { get; set; }

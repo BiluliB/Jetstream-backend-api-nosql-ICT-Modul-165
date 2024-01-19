@@ -1,8 +1,9 @@
-﻿using JetStreamApiMongoDb.Common;
-using JetStreamApiMongoDb.DTOs.Requests;
+﻿using JetStreamApiMongoDb.DTOs.Requests;
+using JetStreamApiMongoDb.DTOs.Responses;
 using JetStreamApiMongoDb.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace JetStreamApiMongoDb.Controllers
 {
@@ -26,12 +27,12 @@ namespace JetStreamApiMongoDb.Controllers
         {
             try
             {
-                var isAuthentiacted = await _userService.AuthenticateAsync(userLoginDTO.UserName, userLoginDTO.Password );
+                var isAuthentiacted = await _userService.Authenticate(userLoginDTO.UserName, userLoginDTO.Password);
                 if (!isAuthentiacted)
                 {
                     return Unauthorized("Benutzername oder Passwort ist falsch.");
                 }
-                var user = await _userService.GetUserByUsernameAsync(userLoginDTO.UserName);
+                var user = await _userService.GetUserByUsername(userLoginDTO.UserName);
                 var token = _tokenService.GenerateToken(userLoginDTO.UserName, user.Role.ToString());
 
                 return Ok(new
@@ -54,12 +55,11 @@ namespace JetStreamApiMongoDb.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserCreateDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "ADMIN")]
-
         public async Task<ActionResult> Register([FromBody] UserCreateDTO userCreateDTO)
         {
             try
             {
-                await _userService.CreateUserAsync(userCreateDTO.UserName, userCreateDTO.Password, userCreateDTO.Role);
+                await _userService.CreateUser(userCreateDTO.UserName, userCreateDTO.Password, userCreateDTO.Role);
                 return Ok($"Benutzer {userCreateDTO.UserName} mit der Rolle {userCreateDTO.Role} wurde erfolgreich erstellt.");
             }
             catch (ArgumentException ex)
@@ -77,7 +77,7 @@ namespace JetStreamApiMongoDb.Controllers
         {
             try
             {
-                await _userService.UnlockUserAsync(userUnlockDTO.UserName);
+                await _userService.UnlockUser(userUnlockDTO.UserName);
                 return Ok($"Benutzer {userUnlockDTO.UserName} wurde erfolgreich entsperrt.");
             }
             catch (ArgumentException ex)
@@ -87,6 +87,80 @@ namespace JetStreamApiMongoDb.Controllers
             catch (InvalidOperationException ex)
             {
                 return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<UserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult<List<UserDTO>>> GetAll()
+        {
+            try
+            {
+                var userDTOs = await _userService.GetAll();
+                if (userDTOs == null)
+                {
+                    return NotFound();
+                }
+                return Ok(userDTOs);
+            }
+            catch (FormatException)
+            {
+                return BadRequest("Invalid Id format.");
+            }
+        }
+
+        [HttpGet("{id:length(24)}")]
+        [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult<UserDTO>> GetById(string id)
+        {
+            try
+            {
+                var userDTO = await _userService.GetById(id);
+                if (userDTO == null)
+                {
+                    return NotFound();
+                }
+                return Ok(userDTO);
+            }
+            catch (FormatException)
+            {
+                return BadRequest("Invalid Id format.");
+            }
+        }
+
+        [HttpDelete("{id:length(24)}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            try
+            {
+                var objectId = new ObjectId(id);
+                var user = await _userService.GetById(id);
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+                await _userService.Delete(objectId);
+                return Ok(new
+                {
+                    Benutzer = user.Name,
+                    Message = "Erfolgreich gelöscht"
+                });
+
+            }
+            catch (FormatException)
+            {
+                return BadRequest("Invalid Id format.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }

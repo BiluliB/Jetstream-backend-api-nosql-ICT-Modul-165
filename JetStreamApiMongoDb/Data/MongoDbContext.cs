@@ -29,7 +29,7 @@ namespace JetStreamApiMongoDb.Data
         public CollectionWrapper<Status> Statuses => new(_mapper, _database, "statuses");
         public CollectionWrapper<Priority> Priorities => new(_mapper, _database, "priorities");
 
-        public CollectionWrapper<T> Get<T>() 
+        public CollectionWrapper<T> Get<T>()
             where T : BaseModel
         {
             var propertyInfo = GetType()
@@ -44,11 +44,5 @@ namespace JetStreamApiMongoDb.Data
                 throw new InvalidOperationException($"No collection wrapper found for type {typeof(T).Name}");
             }
         }
-
-        
     }
-
-
-
-
 }

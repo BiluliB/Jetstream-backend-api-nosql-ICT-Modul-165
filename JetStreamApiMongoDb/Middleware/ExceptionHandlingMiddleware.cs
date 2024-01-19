@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using MongoDB.Driver;
-using System;
+﻿using MongoDB.Driver;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace JetStreamApiMongoDb.Middleware
 {

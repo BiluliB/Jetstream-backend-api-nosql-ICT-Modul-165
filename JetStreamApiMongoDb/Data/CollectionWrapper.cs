@@ -3,7 +3,6 @@ using JetStreamApiMongoDb.Common;
 using JetStreamApiMongoDb.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace JetStreamApiMongoDb.Data
@@ -11,15 +10,18 @@ namespace JetStreamApiMongoDb.Data
     public class CollectionWrapper<T>
         where T : BaseModel
     {
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
         private readonly IMongoCollection<T> _collection;
         private readonly IMongoDatabase _database;
 
         public IMongoCollection<T> Collection => _collection;
+
         public CollectionWrapper(IMapper mapper, IMongoDatabase database, string name)
-        {            _database = database;
+        {
+            _database = database;
             _collection = _database.GetCollection<T>(name);
         }
+
         public async Task<List<T>> FindWithProxies(FilterDefinition<T> filter)
         {
             var aggregation = _collection.Aggregate<T>()
@@ -57,16 +59,17 @@ namespace JetStreamApiMongoDb.Data
 
                     aggregation = aggregation.AppendStage<T>(lookup).AppendStage<T>(unwind);
                 }
-            }           
+            }
             var list = await aggregation.ToListAsync();
             return list;
-        } 
+        }
 
         public async Task<List<ObjectId>> SeedDatabase(IEnumerable<T> entities)
-        {            
+        {
             await _collection.InsertManyAsync(entities);
             return entities.Select(x => x.Id).ToList();
         }
+
         public async Task<bool> Any()
         {
             return await _collection.CountDocumentsAsync(FilterDefinition<T>.Empty) > 0;

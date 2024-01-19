@@ -1,7 +1,6 @@
 ﻿using JetStreamApiMongoDb.Common;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace JetStreamApiMongoDb.Models
@@ -10,8 +9,7 @@ namespace JetStreamApiMongoDb.Models
     /// Model for a service request
     /// </summary>
     public class OrderSubmission : BaseModel
-    {   
-
+    {
         [BsonElement("firstname")]
         [MaxLength(50)]
         public required string Firstname { get; set; }

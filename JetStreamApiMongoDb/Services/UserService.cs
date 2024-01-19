@@ -1,23 +1,30 @@
-﻿using JetStreamApiMongoDb.Interfaces;
+﻿using AutoMapper;
 using JetStreamApiMongoDb.Common;
-using JetStreamApiMongoDb.Models;
 using JetStreamApiMongoDb.Data;
+using JetStreamApiMongoDb.DTOs.Responses;
+using JetStreamApiMongoDb.Interfaces;
+using JetStreamApiMongoDb.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace JetStreamApiMongoDb.Services
 {
     public class UserService : IUserService
     {
         private readonly CollectionWrapper<User> _users;
+        private readonly IMongoDbContext _context;
+        private readonly IMapper _mapper;
 
-        public UserService(IMongoDbContext mongoDbContext)
+        public UserService(IMongoDbContext context, IMapper mapper)
         {
-            _users = mongoDbContext.Users;
+            _context = context;
+            _mapper = mapper;
+            _users = context.Users;
         }
 
-        public async Task CreateUserAsync(string username, string password, Roles role)
+        public async Task CreateUser(string username, string password, Roles role)
         {
             if (!Enum.IsDefined(typeof(Roles), role))
             {
@@ -37,7 +44,19 @@ namespace JetStreamApiMongoDb.Services
             await _users.InsertOneAsync(user);
         }
 
-        public async Task<bool> AuthenticateAsync(string username, string password)
+        public async Task<List<UserDTO>> GetAll()
+        {
+            var users = await _context.Users.FindWithProxies(FilterDefinition<User>.Empty);
+            return _mapper.Map<List<UserDTO>>(users);
+        }
+
+        public async Task<UserDTO> GetById(string id)
+        {
+            var user = await _context.Users.FindWithProxies(Builders<User>.Filter.Eq(u => u.Id, ObjectId.Parse(id)));
+            return _mapper.Map<UserDTO>(user.FirstOrDefault());
+        }
+
+        public async Task<bool> Authenticate(string username, string password)
         {
             var user = await _users.FindByUsernameAsync(username);
 
@@ -72,7 +91,7 @@ namespace JetStreamApiMongoDb.Services
             return true;
         }
 
-        public async Task UnlockUserAsync(string username)
+        public async Task UnlockUser(string username)
         {
             var user = await _users.FindByUsernameAsync(username);
 
@@ -86,9 +105,14 @@ namespace JetStreamApiMongoDb.Services
             await _users.ReplaceOneAsync(user);
         }
 
-        public async Task<User> GetUserByUsernameAsync(string userName)
+        public async Task<User> GetUserByUsername(string userName)
         {
             return await _users.FindByUsernameAsync(userName);
+        }
+
+        public async Task Delete(ObjectId id)
+        {
+            await _users.DeleteOneAsync(id);
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

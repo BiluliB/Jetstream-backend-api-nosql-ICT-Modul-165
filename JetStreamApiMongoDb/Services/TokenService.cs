@@ -1,16 +1,13 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using static JetStreamApiMongoDb.Services.TokenService;
+﻿using JetStreamApiMongoDb.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using JetStreamApiMongoDb.Interfaces;
 
 namespace JetStreamApiMongoDb.Services
 {
-
     public class TokenService : ITokenService
     {
-        //Injecting IConfiguration into this class in order to read Token Key from the configuration file
         private readonly SymmetricSecurityKey _key;
         public TokenService(IConfiguration config)
         {
@@ -19,7 +16,6 @@ namespace JetStreamApiMongoDb.Services
 
         public string GenerateToken(string username, string role)
         {
-            //Creating Claims. You can add more information in these claims. For example email id.
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, username),
@@ -27,10 +23,8 @@ namespace JetStreamApiMongoDb.Services
 
             };
 
-            //Creating credentials. Specifying which type of Security Algorithm we are using
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
-            //Creating Token description
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -42,7 +36,6 @@ namespace JetStreamApiMongoDb.Services
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            //Finally returning the created token
             return tokenHandler.WriteToken(token);
         }
     }

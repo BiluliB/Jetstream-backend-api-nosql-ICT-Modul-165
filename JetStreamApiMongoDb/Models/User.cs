@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using JetStreamApiMongoDb.Common;
+﻿using JetStreamApiMongoDb.Common;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
 
 namespace JetStreamApiMongoDb.Models
 {
     public class User : BaseModel
     {
-        
-
         [BsonElement("name")]
         public required string Name { get; set; }
 

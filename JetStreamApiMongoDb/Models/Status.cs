@@ -9,8 +9,6 @@ namespace JetStreamApiMongoDb.Models
     /// </summary>
     public class Status : BaseModel
     {
-        
-
         [BsonElement("name")]
         [MaxLength(50)]
         public required string Name { get; set; }

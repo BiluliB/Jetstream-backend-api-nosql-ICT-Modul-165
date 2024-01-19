@@ -16,13 +16,13 @@ namespace JetStreamApiMongoDb.Data
 
             if (!await dbContext.Users.Any() && !await dbContext.Priorities.Any() && !await dbContext.Services.Any() && !await dbContext.Statuses.Any() && !await dbContext.OrderSubmissions.Any())
             {
-                await userService.CreateUserAsync("admin", "Password", Roles.ADMIN);
-                await userService.CreateUserAsync("admin1", "Password1", Roles.ADMIN);
-                await userService.CreateUserAsync("user", "Password", Roles.USER);
+                await userService.CreateUser("admin", "Password", Roles.ADMIN);
+                await userService.CreateUser("admin1", "Password1", Roles.ADMIN);
+                await userService.CreateUser("user", "Password", Roles.USER);
 
                 for (int i = 1; i <= 10; i++)
                 {
-                    await userService.CreateUserAsync($"user{i}", $"Password{i}", Roles.USER);
+                    await userService.CreateUser($"user{i}", $"Password{i}", Roles.USER);
                 }
 
                 var priorities = await dbContext.Priorities.SeedDatabase(new List<Priority>

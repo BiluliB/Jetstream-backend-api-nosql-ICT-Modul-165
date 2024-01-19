@@ -9,8 +9,6 @@ namespace JetStreamApiMongoDb.Models
     /// </summary>
     public class Service : BaseModel
     {
-        
-
         [BsonElement("name")]
         [MaxLength(50)]
         public string Name { get; set; }

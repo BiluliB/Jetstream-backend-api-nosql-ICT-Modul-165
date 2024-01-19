@@ -1,7 +1,6 @@
 ﻿using JetStreamApiMongoDb.DTOs.Requests;
 using JetStreamApiMongoDb.DTOs.Responses;
 using JetStreamApiMongoDb.Interfaces;
-using JetStreamApiMongoDb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -54,7 +53,7 @@ namespace JetStreamApiMongoDb.Controllers
             catch (FormatException)
             {
                 return BadRequest("Invalid Id format.");
-            }            
+            }
         }
 
         [HttpGet("{id:length(24)}")]
@@ -96,7 +95,7 @@ namespace JetStreamApiMongoDb.Controllers
 
                 return Ok(updatedOrderSubmission);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
@@ -126,7 +125,6 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
-
         [HttpDelete("{id:length(24)}")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -137,7 +135,7 @@ namespace JetStreamApiMongoDb.Controllers
             {
                 var objectId = new ObjectId(id);
                 await _orderSubmissionService.Delete(objectId);
-                return NoContent();
+                return Ok("Auftrag wurde erfolgreich geloescht");
             }
             catch (InvalidOperationException)
             {
@@ -149,7 +147,6 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
-        // POST api/orderassignment
         [HttpPost("{orderSubmissionId}/assign/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -166,7 +163,6 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
-        // PUT api/orderassignment/{orderSubmissionId}/user/{userId}
         [HttpPut("{orderSubmissionId}/user/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -183,5 +179,4 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
     }
-
 }
