@@ -38,6 +38,7 @@ namespace JetStreamApiMongoDb
             builder.Services.AddScoped<IOrderSubmissionService, OrderSubmissionService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IOrderAssignmentService, OrderAssignmentService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

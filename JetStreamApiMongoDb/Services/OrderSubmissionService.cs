@@ -5,6 +5,8 @@ using JetStreamApiMongoDb.Interfaces;
 using JetStreamApiMongoDb.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JetStreamApiMongoDb.Services
 {
@@ -12,7 +14,6 @@ namespace JetStreamApiMongoDb.Services
     {
         private readonly IMongoDbContext _context;
         private readonly IMapper _mapper;
-
 
         public OrderSubmissionService(IMongoDbContext context, IMapper mapper)
         {
@@ -22,7 +23,6 @@ namespace JetStreamApiMongoDb.Services
 
         public async Task<OrderSubmissionDTO> Create(OrderSubmissionCreateDTO createDTO)
         {
-            // Find the 'offen' status in the database with proxies
             var offenStatusList = await _context.Statuses.FindWithProxies(Builders<Status>.Filter.Eq(s => s.Name, "Offen"));
             var offenStatus = offenStatusList.FirstOrDefault();
 
@@ -31,27 +31,25 @@ namespace JetStreamApiMongoDb.Services
                 throw new InvalidOperationException("Status 'offen' not found in database.");
             }
 
-            // Konvertieren der String-IDs in ObjectId
             var priorityId = ObjectId.Parse(createDTO.PriorityId);
             var serviceId = ObjectId.Parse(createDTO.ServiceId);
 
-            // Laden der vollständigen Priority und Service Objekte
-            var priority = await _context.Priorities.FindByIdAsync(priorityId);
-            var service = await _context.Services.FindByIdAsync(serviceId);
+            var priorityList = await _context.Priorities.FindWithProxies(Builders<Priority>.Filter.Eq(p => p.Id, priorityId));
+            var priority = priorityList.FirstOrDefault();
 
-            // Berechnen des Gesamtpreises und Erstellen der OrderSubmission
+            var serviceList = await _context.Services.FindWithProxies(Builders<Service>.Filter.Eq(s => s.Id, serviceId));
+            var service = serviceList.FirstOrDefault();
+
             var totalPrice = (priority?.Price ?? 0) + (service?.Price ?? 0);
             var orderSubmission = _mapper.Map<OrderSubmission>(createDTO);
             orderSubmission.Priority = priority;
             orderSubmission.Service = service;
-            orderSubmission.Status = offenStatus; // Hier wird das Status-Objekt gesetzt
-            orderSubmission.StatusId = offenStatus.Id; // Setzen der StatusId
+            orderSubmission.Status = offenStatus;
+            orderSubmission.StatusId = offenStatus.Id;
             orderSubmission.TotalPrice_CHF = totalPrice;
 
-            // Save to database
             await _context.OrderSubmissions.InsertOneAsync(orderSubmission);
 
-            // Da die verknüpften Daten bereits gesetzt sind, kann das DTO direkt gemappt werden
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
@@ -63,43 +61,46 @@ namespace JetStreamApiMongoDb.Services
 
         public async Task<OrderSubmissionDTO> GetById(ObjectId id)
         {
-            var orderSubmission = await _context.OrderSubmissions.FindByIdAsync(id);
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmission = orderSubmissionList.FirstOrDefault();
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
         public async Task<OrderSubmissionDTO> Update(ObjectId id, OrderSubmissionUpdateDTO updateDTO)
         {
-            // Find the existing order submission
-            var orderSubmission = await _context.OrderSubmissions.FindByIdAsync(id);
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmission = orderSubmissionList.FirstOrDefault();
+
             if (orderSubmission == null)
             {
                 throw new InvalidOperationException("Order submission not found.");
             }
 
-            // Update the order submission with the new values
             _mapper.Map(updateDTO, orderSubmission);
 
-            // If the priority, status or service has been updated, load the new objects and recalculate the total price
             if (updateDTO.PriorityId != null || updateDTO.ServiceId != null || updateDTO.StatusId != null)
             {
                 if (updateDTO.PriorityId != null)
                 {
                     var priorityId = ObjectId.Parse(updateDTO.PriorityId);
-                    var priority = await _context.Priorities.FindByIdAsync(priorityId);
+                    var priorityList = await _context.Priorities.FindWithProxies(Builders<Priority>.Filter.Eq(p => p.Id, priorityId));
+                    var priority = priorityList.FirstOrDefault();
                     orderSubmission.Priority = priority;
                 }
 
                 if (updateDTO.ServiceId != null)
                 {
                     var serviceId = ObjectId.Parse(updateDTO.ServiceId);
-                    var service = await _context.Services.FindByIdAsync(serviceId);
+                    var serviceList = await _context.Services.FindWithProxies(Builders<Service>.Filter.Eq(s => s.Id, serviceId));
+                    var service = serviceList.FirstOrDefault();
                     orderSubmission.Service = service;
                 }
 
                 if (updateDTO.StatusId != null)
                 {
                     var statusId = ObjectId.Parse(updateDTO.StatusId);
-                    var status = await _context.Statuses.FindByIdAsync(statusId);
+                    var statusList = await _context.Statuses.FindWithProxies(Builders<Status>.Filter.Eq(s => s.Id, statusId));
+                    var status = statusList.FirstOrDefault();
                     orderSubmission.Status = status;
                 }
 
@@ -107,25 +108,53 @@ namespace JetStreamApiMongoDb.Services
                 orderSubmission.TotalPrice_CHF = totalPrice;
             }
 
-            // Save the updated order submission back to the database
             await _context.OrderSubmissions.ReplaceOneAsync(orderSubmission);
 
-            // Return the updated order submission
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
-        public async Task Delete(ObjectId id)
+        public async Task<OrderSubmissionDTO> Cancel(ObjectId id)
         {
-            // Find the existing order submission
-            var orderSubmission = await _context.OrderSubmissions.FindByIdAsync(id);
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmission = orderSubmissionList.FirstOrDefault();
+
             if (orderSubmission == null)
             {
                 throw new InvalidOperationException("Order submission not found.");
             }
 
-            // Delete the order submission from the database
-            await _context.OrderSubmissions.DeleteOneAsync(id);
+            var storniertStatusList = await _context.Statuses.FindWithProxies(Builders<Status>.Filter.Eq(s => s.Name, "Storniert"));
+            var storniertStatus = storniertStatusList.FirstOrDefault();
+
+            if (storniertStatus == null)
+            {
+                throw new InvalidOperationException("Status 'Storniert' not found in database.");
+            }
+
+            orderSubmission.StatusId = storniertStatus.Id;
+
+            await _context.OrderSubmissions.ReplaceOneAsync(orderSubmission);
+
+            // Reload the orderSubmission from the database
+            orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            orderSubmission = orderSubmissionList.FirstOrDefault();
+
+            return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
+
+
+        public async Task Delete(ObjectId id)
+        {
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmission = orderSubmissionList.FirstOrDefault();
+
+            if (orderSubmission == null)
+            {
+                throw new InvalidOperationException("Order submission not found.");
+            }
+
+            await _context.OrderSubmissions.DeleteOneAsync(id);
+        }
     }
 }
