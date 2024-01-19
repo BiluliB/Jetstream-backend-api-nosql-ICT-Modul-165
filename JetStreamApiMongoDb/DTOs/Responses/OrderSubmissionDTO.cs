@@ -48,5 +48,8 @@ namespace JetStreamApiMongoDb.DTOs.Responses
 
         [MaxLength(500)]
         public string Comment { get; set; }
+
+        public string? UserId { get; set; }
+        public UserDTO User { get; set; }
     }
 }

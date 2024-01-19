@@ -14,6 +14,8 @@ namespace JetStreamApiMongoDb.Data
         private readonly IMapper _mapper;
         private readonly IMongoCollection<T> _collection;
         private readonly IMongoDatabase _database;
+
+        public IMongoCollection<T> Collection => _collection;
         public CollectionWrapper(IMapper mapper, IMongoDatabase database, string name)
         {            _database = database;
             _collection = _database.GetCollection<T>(name);

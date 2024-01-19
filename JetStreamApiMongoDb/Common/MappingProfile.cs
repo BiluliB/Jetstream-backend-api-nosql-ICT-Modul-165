@@ -31,6 +31,24 @@ namespace JetStreamApiMongoDb.Common
             CreateMap<Priority, PriorityDTO>();
             CreateMap<Service, ServiceDTO>();
             CreateMap<Status, StatusDTO>();
+            CreateMap<User, UserDTO>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+                {
+                    var target = src.GetType();
+                    var prop = target.GetProperty(opts.DestinationMember.Name);
+
+                    if (prop != null)
+                    {
+                        var value = prop.GetValue(src);
+                        if (value != null)
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }));
+
         }
     }
 }

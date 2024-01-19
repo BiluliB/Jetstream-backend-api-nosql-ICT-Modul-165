@@ -10,14 +10,7 @@ namespace JetStreamApiMongoDb.Models
     /// Model for a service request
     /// </summary>
     public class OrderSubmission : BaseModel
-    {
-        public new List<(string, string)> foreignKeys = new()
-        {
-            ("priorities", "priority"),
-            ("services", "service"),
-            ("statuses", "status"),
-            ("users", "user")
-        };        
+    {   
 
         [BsonElement("firstname")]
         [MaxLength(50)]
@@ -76,7 +69,7 @@ namespace JetStreamApiMongoDb.Models
         public string? Comment { get; set; }
 
         [BsonElement("user_id")]
-        public ObjectId? UserId { get; set; }
+        public ObjectId? UserId { get; set; } = null;
 
         [BsonElement("user")]
         [Proxy("users", "user_id")]
