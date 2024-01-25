@@ -20,28 +20,34 @@ namespace JetStreamApiMongoDb.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex);
+
+                if (!context.Response.HasStarted)
+                {
+                    context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+                    await context.Response.WriteAsJsonAsync(new
+                    {
+                        Message = "Ein interner Serverfehler ist aufgetreten.",
+                        StatusCode = context.Response.StatusCode,
+                        Detail = ex.Message
+                    });
+                }
             }
-        }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
-        {
-            context.Response.ContentType = "application/json";
-            string message = exception.Message;
-            int statusCode = (int)HttpStatusCode.InternalServerError;
-
-            if (exception is MongoCommandException mongoCommandException)
+            // Handle 401 Unauthorized and 403 Forbidden
+            if ((context.Response.StatusCode == 401 || context.Response.StatusCode == 403) &&
+                context.Response.ContentLength == null &&
+                !context.Response.HasStarted)
             {
-                message = "Ein MongoDB-Fehler ist aufgetreten: " + mongoCommandException.Message;
-                statusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    Message = "Zugriff verweigert: Sie haben keine Berechtigung.",
+                    StatusCode = context.Response.StatusCode
+                });
             }
-
-            context.Response.StatusCode = statusCode;
-            return context.Response.WriteAsJsonAsync(new
-            {
-                Message = message,
-                StatusCode = statusCode
-            });
         }
     }
+
 }

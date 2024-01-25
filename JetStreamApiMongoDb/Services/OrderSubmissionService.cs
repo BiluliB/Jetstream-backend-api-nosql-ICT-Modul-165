@@ -30,13 +30,22 @@ namespace JetStreamApiMongoDb.Services
             }
 
             var priorityId = ObjectId.Parse(createDTO.PriorityId);
-            var serviceId = ObjectId.Parse(createDTO.ServiceId);
-
             var priorityList = await _context.Priorities.FindWithProxies(Builders<Priority>.Filter.Eq(p => p.Id, priorityId));
             var priority = priorityList.FirstOrDefault();
 
+            if (priority == null)
+            {
+                throw new KeyNotFoundException($"Priority with ID '{createDTO.PriorityId}' not found.");
+            }
+
+            var serviceId = ObjectId.Parse(createDTO.ServiceId);
             var serviceList = await _context.Services.FindWithProxies(Builders<Service>.Filter.Eq(s => s.Id, serviceId));
             var service = serviceList.FirstOrDefault();
+
+            if (service == null)
+            {
+                throw new KeyNotFoundException($"Service with ID '{createDTO.ServiceId}' not found.");
+            }
 
             var totalPrice = (priority?.Price ?? 0) + (service?.Price ?? 0);
             var orderSubmission = _mapper.Map<OrderSubmission>(createDTO);

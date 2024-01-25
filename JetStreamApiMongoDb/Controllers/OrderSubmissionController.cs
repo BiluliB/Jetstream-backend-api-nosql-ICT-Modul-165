@@ -1,6 +1,7 @@
 ﻿using JetStreamApiMongoDb.DTOs.Requests;
 using JetStreamApiMongoDb.DTOs.Responses;
 using JetStreamApiMongoDb.Interfaces;
+using JetStreamApiMongoDb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -13,14 +14,16 @@ namespace JetStreamApiMongoDb.Controllers
     public class OrderSubmissionController : ControllerBase
     {
         private readonly IOrderSubmissionService _orderSubmissionService;
+        private readonly IUserService _userService;
 
-        public OrderSubmissionController(IOrderSubmissionService orderSubmissionService)
+        public OrderSubmissionController(IOrderSubmissionService orderSubmissionService, IUserService userService)
         {
             _orderSubmissionService = orderSubmissionService;
+            _userService = userService;
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(List<OrderSubmissionCreateDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<OrderSubmissionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "ADMIN,USER")]
         public async Task<ActionResult<OrderSubmissionDTO>> Create([FromBody] OrderSubmissionCreateDTO createDTO)
@@ -135,7 +138,7 @@ namespace JetStreamApiMongoDb.Controllers
             {
                 var objectId = new ObjectId(id);
                 await _orderSubmissionService.Delete(objectId);
-                return Ok("Auftrag wurde erfolgreich geloescht");
+                return Ok();
             }
             catch (InvalidOperationException)
             {

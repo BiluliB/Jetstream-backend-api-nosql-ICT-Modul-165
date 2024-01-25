@@ -1,6 +1,7 @@
 ﻿using JetStreamApiMongoDb.Common;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace JetStreamApiMongoDb.Models
 {
@@ -10,9 +11,11 @@ namespace JetStreamApiMongoDb.Models
         public required string Name { get; set; }
 
         [BsonElement("password_hash")]
+        [AllowNull, NotNull]
         public byte[] PasswordHash { get; set; }
 
         [BsonElement("password_salt")]
+        [AllowNull, NotNull]
         public byte[] PasswordSalt { get; set; }
 
         [BsonElement("password_input_attempt")]

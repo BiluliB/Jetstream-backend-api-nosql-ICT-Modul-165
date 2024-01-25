@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace JetStreamApiMongoDb.Models
 {
@@ -11,6 +12,8 @@ namespace JetStreamApiMongoDb.Models
     {
         [BsonElement("name")]
         [MaxLength(50)]
+
+        [AllowNull, NotNull]
         public string Name { get; set; }
 
         [BsonElement("price")]

@@ -92,9 +92,10 @@ namespace JetStreamApiMongoDb
                 app.UseSwaggerUI();
             }
 
+            app.UseHttpsRedirection();
+
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace JetStreamApiMongoDb.DTOs.Requests
 {
@@ -6,6 +7,7 @@ namespace JetStreamApiMongoDb.DTOs.Requests
     {
         [Required]
         [MaxLength(50)]
+        [AllowNull, NotNull]
         public string UserName { get; set; }
     }
 }

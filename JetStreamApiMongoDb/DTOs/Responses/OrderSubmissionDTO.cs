@@ -1,11 +1,13 @@
 ﻿using JetStreamApiMongoDb.Models;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace JetStreamApiMongoDb.DTOs.Responses
 {
     public class OrderSubmissionDTO
     {
+        [AllowNull, NotNull]
         public string Id { get; set; }
 
         [Required]
@@ -28,6 +30,8 @@ namespace JetStreamApiMongoDb.DTOs.Responses
         public string? PriorityId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+
+        [AllowNull, NotNull]
         public PriorityDTO Priority { get; set; }
 
         [Required]
@@ -38,18 +42,26 @@ namespace JetStreamApiMongoDb.DTOs.Responses
 
         [Required]
         public string? ServiceId { get; set; }
+
+        [AllowNull, NotNull]
         public ServiceDTO Service { get; set; }
 
         [Required]
         public decimal TotalPrice_CHF { get; set; }
 
         public string? StatusId { get; set; }
+
+        [AllowNull, NotNull]
         public StatusDTO Status { get; set; }
 
         [MaxLength(500)]
+
+        [AllowNull, NotNull]
         public string Comment { get; set; }
 
         public string? UserId { get; set; }
+
+        [AllowNull, NotNull]
         public UserDTO User { get; set; }
     }
 }
