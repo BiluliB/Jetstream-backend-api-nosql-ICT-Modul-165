@@ -3,7 +3,7 @@
 namespace JetStreamApiMongoDb.Data
 {
 
-    public static class MongoDbSchemas
+    public static class MongoDbSchema
     {
         public static BsonDocument OrderSubmissionSchema = new BsonDocument
     {

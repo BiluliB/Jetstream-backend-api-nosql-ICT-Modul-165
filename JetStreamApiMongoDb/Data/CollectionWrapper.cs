@@ -26,58 +26,69 @@ namespace JetStreamApiMongoDb.Data
             if (!collectionList.Contains(collectionName))
             {
                 _database.CreateCollection(collectionName);
-
-                var schema = GetSchemaForType();
-                if (schema != null)
-                {
-                    var validator = new BsonDocument
-                {
-                    { "$jsonSchema", schema }
-                };
-
-                    var validationOptions = new BsonDocument
-                {
-                    { "collMod", collectionName },
-                    { "validator", validator },
-                    { "validationLevel", "moderate" },
-                    { "validationAction", "error" }
-                };
-
-                    _database.RunCommand<BsonDocument>(validationOptions);
-                }
+                ApplyCollectionSchema(collectionName);
+                var indexSetup = new MongoDbIndex(_database);
+                indexSetup.CreateIndexes();
+                
             }
-
-            _collection = _database.GetCollection<T>(collectionName);
+            _collection = _database.GetCollection<T>(collectionName);          
         }
 
+        private void ApplyCollectionSchema(string collectionName)
+        {
+            var schema = GetSchemaForType();
+            if (schema != null)
+            {
+                var validator = new BsonDocument
+            {
+                { "$jsonSchema", schema }
+            };
+
+                var validationOptions = new BsonDocument
+            {
+                { "collMod", collectionName },
+                { "validator", validator },
+                { "validationLevel", "moderate" },
+                { "validationAction", "error" }
+            };
+
+                _database.RunCommand<BsonDocument>(validationOptions);
+            }
+        }
 
         private BsonDocument GetSchemaForType()
         {
             if (typeof(T) == typeof(OrderSubmission))
             {
-                return MongoDbSchemas.OrderSubmissionSchema;
+                return MongoDbSchema.OrderSubmissionSchema;
             }
             else if (typeof(T) == typeof(Priority))
             {
-                return MongoDbSchemas.PrioritySchema;
+                return MongoDbSchema.PrioritySchema;
             }
             else if (typeof(T) == typeof(Service))
             {
-                return MongoDbSchemas.ServiceSchema;
+                return MongoDbSchema.ServiceSchema;
             }
             else if (typeof(T) == typeof(Status))
             {
-                return MongoDbSchemas.StatusSchema;
+                return MongoDbSchema.StatusSchema;
             }
             else if (typeof(T) == typeof(User))
             {
-                return MongoDbSchemas.UserSchema;
+                return MongoDbSchema.UserSchema;
             }
             else
             {
                 return null;
             }
         }
+
+        //private void CreateIndexesIfNecessary(string collectionName)
+        //{
+        //    var indexSetup = new MongoDbIndex(_database);
+        //    indexSetup.CreateIndexes(collectionName);
+        //}
 
         public async Task<List<T>> FindWithProxies(FilterDefinition<T> filter)
         {
