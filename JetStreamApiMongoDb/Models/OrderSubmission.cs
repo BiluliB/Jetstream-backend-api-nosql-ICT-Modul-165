@@ -51,7 +51,7 @@ namespace JetStreamApiMongoDb.Models
         public bool ShouldSerializeService() => false;
 
         [BsonElement("total_price_chf")]
-        public decimal TotalPrice_CHF { get; set; }
+        public double TotalPrice_CHF { get; set; }
 
         [BsonElement("status_id")]
         public required ObjectId StatusId { get; set; }

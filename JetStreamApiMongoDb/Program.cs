@@ -96,7 +96,6 @@ namespace JetStreamApiMongoDb
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-
             app.UseAuthentication();
             app.UseAuthorization();
 

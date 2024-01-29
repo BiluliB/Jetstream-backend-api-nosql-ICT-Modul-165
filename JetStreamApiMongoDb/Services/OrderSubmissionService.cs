@@ -48,6 +48,7 @@ namespace JetStreamApiMongoDb.Services
             }
 
             var totalPrice = (priority?.Price ?? 0) + (service?.Price ?? 0);
+
             var orderSubmission = _mapper.Map<OrderSubmission>(createDTO);
             orderSubmission.Priority = priority;
             orderSubmission.Service = service;
@@ -113,6 +114,7 @@ namespace JetStreamApiMongoDb.Services
 
                 var totalPrice = (orderSubmission.Priority?.Price ?? 0) + (orderSubmission.Service?.Price ?? 0);
                 orderSubmission.TotalPrice_CHF = totalPrice;
+
             }
 
             await _context.OrderSubmissions.ReplaceOneAsync(orderSubmission);

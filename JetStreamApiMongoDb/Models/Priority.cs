@@ -17,6 +17,6 @@ namespace JetStreamApiMongoDb.Models
         public string Name { get; set; }
 
         [BsonElement("price")]
-        public decimal Price { get; set; }
+        public double Price { get; set; }
     }
 }

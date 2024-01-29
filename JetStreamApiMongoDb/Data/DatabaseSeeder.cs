@@ -1,6 +1,7 @@
 ﻿using JetStreamApiMongoDb.Common;
 using JetStreamApiMongoDb.Interfaces;
 using JetStreamApiMongoDb.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace JetStreamApiMongoDb.Data
@@ -27,19 +28,20 @@ namespace JetStreamApiMongoDb.Data
 
                 var priorities = await dbContext.Priorities.SeedDatabase(new List<Priority>
             {
-                new () { Name = "Tief", Price = 0 },
-                new () { Name = "Standard", Price = 5 },
-                new () { Name = "Hoch", Price = 10 }
+                new () { Name = "Tief", Price = 0.0 },
+                new () { Name = "Standard", Price = 5.0 },
+                new () { Name = "Hoch", Price = 10.0 }
+
             });
 
                 var services = await dbContext.Services.SeedDatabase(new List<Service>
             {
-                new () { Name = "Kleiner Service", Price = 49 },
-                new () { Name = "Grosser Service", Price = 69 },
-                new () { Name = "Rennskiservice", Price = 99 },
-                new () { Name = "Bindung montieren und einstellen", Price = 39 },
-                new () { Name = "Fell zuschneiden", Price = 25 },
-                new () { Name = "Heisswachsen", Price = 18 }
+                new () { Name = "Kleiner Service", Price = 49.0 },
+                new () { Name = "Grosser Service", Price = 69.0 },
+                new () { Name = "Rennskiservice", Price = 99.0 },
+                new () { Name = "Bindung montieren und einstellen", Price = 39.0 },
+                new () { Name = "Fell zuschneiden", Price = 25.0 },
+                new () { Name = "Heisswachsen", Price = 18.0 }
             });
 
                 var statuses = await dbContext.Statuses.SeedDatabase(new List<Status>

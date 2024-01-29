@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JetStreamApiMongoDb.Common;
 using JetStreamApiMongoDb.Models;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Reflection;
@@ -10,16 +11,72 @@ namespace JetStreamApiMongoDb.Data
     public class CollectionWrapper<T>
         where T : BaseModel
     {
-        //private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
         private readonly IMongoCollection<T> _collection;
         private readonly IMongoDatabase _database;
 
         public IMongoCollection<T> Collection => _collection;
 
-        public CollectionWrapper(IMapper mapper, IMongoDatabase database, string name)
+        public CollectionWrapper(IMapper mapper, IMongoDatabase database, string collectionName)
         {
+            _mapper = mapper;
             _database = database;
-            _collection = _database.GetCollection<T>(name);
+            var collectionList = _database.ListCollectionNames().ToList();
+
+            if (!collectionList.Contains(collectionName))
+            {
+                _database.CreateCollection(collectionName);
+
+                var schema = GetSchemaForType();
+                if (schema != null)
+                {
+                    var validator = new BsonDocument
+                {
+                    { "$jsonSchema", schema }
+                };
+
+                    var validationOptions = new BsonDocument
+                {
+                    { "collMod", collectionName },
+                    { "validator", validator },
+                    { "validationLevel", "moderate" },
+                    { "validationAction", "error" }
+                };
+
+                    _database.RunCommand<BsonDocument>(validationOptions);
+                }
+            }
+
+            _collection = _database.GetCollection<T>(collectionName);
+        }
+
+
+        private BsonDocument GetSchemaForType()
+        {
+            if (typeof(T) == typeof(OrderSubmission))
+            {
+                return MongoDbSchemas.OrderSubmissionSchema;
+            }
+            else if (typeof(T) == typeof(Priority))
+            {
+                return MongoDbSchemas.PrioritySchema;
+            }
+            else if (typeof(T) == typeof(Service))
+            {
+                return MongoDbSchemas.ServiceSchema;
+            }
+            else if (typeof(T) == typeof(Status))
+            {
+                return MongoDbSchemas.StatusSchema;
+            }
+            else if (typeof(T) == typeof(User))
+            {
+                return MongoDbSchemas.UserSchema;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<List<T>> FindWithProxies(FilterDefinition<T> filter)

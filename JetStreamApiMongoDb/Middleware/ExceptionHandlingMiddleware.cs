@@ -1,7 +1,4 @@
-﻿using MongoDB.Driver;
-using System.Net;
-
-namespace JetStreamApiMongoDb.Middleware
+﻿namespace JetStreamApiMongoDb.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
@@ -34,8 +31,6 @@ namespace JetStreamApiMongoDb.Middleware
                     });
                 }
             }
-
-            // Handle 401 Unauthorized and 403 Forbidden
             if ((context.Response.StatusCode == 401 || context.Response.StatusCode == 403) &&
                 context.Response.ContentLength == null &&
                 !context.Response.HasStarted)
@@ -49,5 +44,4 @@ namespace JetStreamApiMongoDb.Middleware
             }
         }
     }
-
 }
