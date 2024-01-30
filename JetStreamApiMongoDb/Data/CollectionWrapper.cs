@@ -84,12 +84,6 @@ namespace JetStreamApiMongoDb.Data
             }
         }
 
-        //private void CreateIndexesIfNecessary(string collectionName)
-        //{
-        //    var indexSetup = new MongoDbIndex(_database);
-        //    indexSetup.CreateIndexes(collectionName);
-        //}
-
         public async Task<List<T>> FindWithProxies(FilterDefinition<T> filter)
         {
             var aggregation = _collection.Aggregate<T>()
