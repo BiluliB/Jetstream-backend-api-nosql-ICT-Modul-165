@@ -69,14 +69,14 @@ namespace JetStreamApiMongoDb.Services
 
         public async Task<OrderSubmissionDTO> GetById(ObjectId id)
         {
-            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
             var orderSubmission = orderSubmissionList.FirstOrDefault();
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
         public async Task<OrderSubmissionDTO> Update(ObjectId id, OrderSubmissionUpdateDTO updateDTO)
         {
-            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
             var orderSubmission = orderSubmissionList.FirstOrDefault();
 
             if (orderSubmission == null)
@@ -91,7 +91,7 @@ namespace JetStreamApiMongoDb.Services
                 if (updateDTO.PriorityId != null)
                 {
                     var priorityId = ObjectId.Parse(updateDTO.PriorityId);
-                    var priorityList = await _context.Priorities.FindWithProxies(Builders<Priority>.Filter.Eq(p => p.Id, priorityId));
+                    var priorityList = await _context.Priorities.FindWithProxies(Builders<Priority>.Filter.Eq("_id", priorityId));
                     var priority = priorityList.FirstOrDefault();
                     orderSubmission.Priority = priority;
                 }
@@ -99,17 +99,9 @@ namespace JetStreamApiMongoDb.Services
                 if (updateDTO.ServiceId != null)
                 {
                     var serviceId = ObjectId.Parse(updateDTO.ServiceId);
-                    var serviceList = await _context.Services.FindWithProxies(Builders<Service>.Filter.Eq(s => s.Id, serviceId));
+                    var serviceList = await _context.Services.FindWithProxies(Builders<Service>.Filter.Eq("_id", serviceId));
                     var service = serviceList.FirstOrDefault();
                     orderSubmission.Service = service;
-                }
-
-                if (updateDTO.StatusId != null)
-                {
-                    var statusId = ObjectId.Parse(updateDTO.StatusId);
-                    var statusList = await _context.Statuses.FindWithProxies(Builders<Status>.Filter.Eq(s => s.Id, statusId));
-                    var status = statusList.FirstOrDefault();
-                    orderSubmission.Status = status;
                 }
 
                 var totalPrice = (orderSubmission.Priority?.Price ?? 0) + (orderSubmission.Service?.Price ?? 0);
@@ -124,7 +116,7 @@ namespace JetStreamApiMongoDb.Services
 
         public async Task<OrderSubmissionDTO> Cancel(ObjectId id)
         {
-            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
             var orderSubmission = orderSubmissionList.FirstOrDefault();
 
             if (orderSubmission == null)
@@ -144,7 +136,7 @@ namespace JetStreamApiMongoDb.Services
 
             await _context.OrderSubmissions.ReplaceOneAsync(orderSubmission);
 
-            orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
             orderSubmission = orderSubmissionList.FirstOrDefault();
 
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
@@ -152,7 +144,7 @@ namespace JetStreamApiMongoDb.Services
 
         public async Task Delete(ObjectId id)
         {
-            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq(os => os.Id, id));
+            var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
             var orderSubmission = orderSubmissionList.FirstOrDefault();
 
             if (orderSubmission == null)

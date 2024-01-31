@@ -23,7 +23,7 @@ namespace JetStreamApiMongoDb.DTOs.Responses
         public string? Email { get; set; }
 
         [Required]
-        [RegularExpression(@"^(\+\d{1,3}[- ]?)?\d{10}$", ErrorMessage = "Invalid phone number")]
+        [RegularExpression(@"^(\+\d{1,3}[- ]?)?[0-9 ]{13}$", ErrorMessage = "Invalid phone number")]
         public string? Phone { get; set; }
 
         [Required]

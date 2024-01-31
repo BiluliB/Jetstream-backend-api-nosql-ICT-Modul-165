@@ -15,8 +15,6 @@ namespace JetStreamApiMongoDb.Data
         private readonly IMongoCollection<T> _collection;
         private readonly IMongoDatabase _database;
 
-        public IMongoCollection<T> Collection => _collection;
-
         public CollectionWrapper(IMapper mapper, IMongoDatabase database, string collectionName)
         {
             _mapper = mapper;
@@ -25,64 +23,10 @@ namespace JetStreamApiMongoDb.Data
 
             if (!collectionList.Contains(collectionName))
             {
-                _database.CreateCollection(collectionName);
-                ApplyCollectionSchema(collectionName);
-                var indexSetup = new MongoDbIndex(_database);
-                indexSetup.CreateIndexes();
-                
+                _database.CreateCollection(collectionName);                
             }
             _collection = _database.GetCollection<T>(collectionName);          
-        }
-
-        private void ApplyCollectionSchema(string collectionName)
-        {
-            var schema = GetSchemaForType();
-            if (schema != null)
-            {
-                var validator = new BsonDocument
-            {
-                { "$jsonSchema", schema }
-            };
-
-                var validationOptions = new BsonDocument
-            {
-                { "collMod", collectionName },
-                { "validator", validator },
-                { "validationLevel", "moderate" },
-                { "validationAction", "error" }
-            };
-
-                _database.RunCommand<BsonDocument>(validationOptions);
-            }
-        }
-
-        private BsonDocument GetSchemaForType()
-        {
-            if (typeof(T) == typeof(OrderSubmission))
-            {
-                return MongoDbSchema.OrderSubmissionSchema;
-            }
-            else if (typeof(T) == typeof(Priority))
-            {
-                return MongoDbSchema.PrioritySchema;
-            }
-            else if (typeof(T) == typeof(Service))
-            {
-                return MongoDbSchema.ServiceSchema;
-            }
-            else if (typeof(T) == typeof(Status))
-            {
-                return MongoDbSchema.StatusSchema;
-            }
-            else if (typeof(T) == typeof(User))
-            {
-                return MongoDbSchema.UserSchema;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        }        
 
         public async Task<List<T>> FindWithProxies(FilterDefinition<T> filter)
         {
@@ -121,7 +65,7 @@ namespace JetStreamApiMongoDb.Data
 
                     aggregation = aggregation.AppendStage<T>(lookup).AppendStage<T>(unwind);
                 }
-            }
+            }            
             var list = await aggregation.ToListAsync();
             return list;
         }
