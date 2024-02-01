@@ -25,7 +25,6 @@ namespace JetStreamApiMongoDb.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(List<OrderSubmissionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "ADMIN,USER")]
         public async Task<ActionResult<OrderSubmissionDTO>> Create([FromBody] OrderSubmissionCreateDTO createDTO)
         {
             try
@@ -107,7 +106,7 @@ namespace JetStreamApiMongoDb.Controllers
         [HttpPut("{id:length(24)}/cancel")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN,USER")]
         public async Task<ActionResult<OrderSubmissionDTO>> CancelOrder(string id)
         {
             try

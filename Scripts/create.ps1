@@ -8,7 +8,7 @@ Catch {
 }
 
 Try {
-    $collectionNames = Get-ChildItem -Path .\MongoDbScripts\schemaCollection\*.js | ForEach-Object {
+    $collectionNames = Get-ChildItem -Path .\MongoDbScripts\CollectionsSchema\*.js | ForEach-Object {
         $_.BaseName
     }
 
@@ -17,7 +17,7 @@ Try {
     
     # Durch jede JS-Datei iterieren und das Skript ausführen
     foreach ($collectionName in $collectionNames) {
-        $filePath = ".\MongoDbScripts\schemaCollection\$collectionName.js"
+        $filePath = ".\MongoDbScripts\CollectionsSchema\$collectionName.js"
         mongosh --quiet --file $filePath
     }
 
@@ -39,14 +39,14 @@ Catch {
 }
 
 Try {
-    $seedNames = Get-ChildItem -Path .\MigrationScript\*.js | ForEach-Object {
+    $seedNames = Get-ChildItem -Path .\MongoDbScripts\Migration\*.js | ForEach-Object {
         $_.BaseName
     }
 
     Write-Host "`nErstelle Daten in der Datenbank $($seedNames -join ', ')..." -ForegroundColor Cyan
 
     foreach ($seedName in $seedNames) {
-        $filePath = ".\MigrationScript\$seedName.js"
+        $filePath = ".\MongoDbScripts\Migration\$seedName.js"
         mongosh --quiet --file $filePath
     }
     Write-Host "Daten erfolgreich in die Datenbank geseedet." -ForegroundColor Green

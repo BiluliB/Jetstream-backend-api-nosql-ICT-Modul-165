@@ -1,0 +1,709 @@
+{
+	"id": "ad79dd5c-29ce-4f94-865a-2b637911f168",
+	"name": "JetStreamApiMongoDb",
+	"timestamp": "2024-02-01T02:16:56.109Z",
+	"collection_id": "29156451-45b3f302-d09f-42ff-844d-d771c33fb0a8",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 52,
+	"delay": "200",
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2024-02-01T02:16:52.505Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "314cc1cb-8114-49fe-8529-ac9a97375ab4",
+			"name": "AdminAuthenticate",
+			"url": "https://localhost:7162/api/user/authenticate",
+			"time": 27,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields - username and token": true,
+				"Token is a non-empty string": true,
+				"Content-Type header is application/json": true,
+				"Username is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - username and token": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Username is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				27
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields - username and token": true,
+					"Token is a non-empty string": true,
+					"Content-Type header is application/json": true,
+					"Username is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "f1591980-3c31-443c-bce2-eb5d6f842884",
+			"name": "ById-OrderSubmission",
+			"url": "https://localhost:7162/api/OrderSubmission/65ba5b094b0c591ed39d0eb1",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "150b95c8-8494-4a6d-92d1-e1c6b3491be0",
+			"name": "ChangeOrderSubmissionToUser",
+			"url": "https://localhost:7162/api/OrderSubmission/65ba5b094b0c591ed39d0eb0/user/65ba5b084b0c591ed39d0e97",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "6fa7c783-b5dc-4e87-8ca5-9430dbf28409",
+			"name": "UserRegister",
+			"url": "https://localhost:7162/api/user/register",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response time is less than 200ms": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 200ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response time is less than 200ms": true
+				}
+			]
+		},
+		{
+			"id": "b05a0527-d428-403c-b838-8df9ec40bb7f",
+			"name": "ById-User",
+			"url": "https://localhost:7162/api/user/65ba5b084b0c591ed39d0e9b",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type is application/json": true,
+				"Benutzer field is present in the response": true,
+				"Message field is present in the response": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Benutzer field is present in the response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message field is present in the response": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type is application/json": true,
+					"Benutzer field is present in the response": true,
+					"Message field is present in the response": true
+				}
+			]
+		},
+		{
+			"id": "218e5d50-4c32-4850-87b7-f8e56ef8938e",
+			"name": "All-User",
+			"url": "https://localhost:7162/api/user/",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields": true,
+				"Id is a non-empty string": true,
+				"Name is a non-empty string and in a valid format": true,
+				"IsLocked is a boolean value": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Id is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is a non-empty string and in a valid format": {
+					"pass": 1,
+					"fail": 0
+				},
+				"IsLocked is a boolean value": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields": true,
+					"Id is a non-empty string": true,
+					"Name is a non-empty string and in a valid format": true,
+					"IsLocked is a boolean value": true
+				}
+			]
+		},
+		{
+			"id": "a4f220fa-9d81-4871-9f99-45fd4f345b68",
+			"name": "ById-User",
+			"url": "https://localhost:7162/api/user/65ba5b084b0c591ed39d0e93",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Name is a non-empty string": true,
+				"PasswordInputAttempt is a non-negative integer": true,
+				"IsLocked field is a boolean value": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"PasswordInputAttempt is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"IsLocked field is a boolean value": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Name is a non-empty string": true,
+					"PasswordInputAttempt is a non-negative integer": true,
+					"IsLocked field is a boolean value": true
+				}
+			]
+		},
+		{
+			"id": "c29c7199-d1d0-45d6-b93a-ec5f61362ae7",
+			"name": "UserAuthenticate",
+			"url": "https://localhost:7162/api/user/authenticate",
+			"time": 13,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields - username and token": true,
+				"Token is a non-empty string": true,
+				"Content-Type header is application/json": true,
+				"Username is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - username and token": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Username is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields - username and token": true,
+					"Token is a non-empty string": true,
+					"Content-Type header is application/json": true,
+					"Username is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "b0698c4a-1063-4135-b14c-f5c6448ae71d",
+			"name": "NewOrderSubmission",
+			"url": "https://localhost:7162/api/OrderSubmission/",
+			"time": 17,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Response status code is 201": true,
+				"Response has the required fields": true,
+				"Priority price is a non-negative integer": true,
+				"Service price is a non-negative integer": true,
+				"Verify that the status object is present and contains expected fields": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Priority price is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Service price is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify that the status object is present and contains expected fields": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Response status code is 201": true,
+					"Response has the required fields": true,
+					"Priority price is a non-negative integer": true,
+					"Service price is a non-negative integer": true,
+					"Verify that the status object is present and contains expected fields": true
+				}
+			]
+		},
+		{
+			"id": "46605bc0-791f-4d7c-a5b7-1c4a82925196",
+			"name": "All-OrderSubmission",
+			"url": "https://localhost:7162/api/OrderSubmission/",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Email is in a valid format": true,
+				"Verify priority and service objects have required fields": true,
+				"Total price is a non-negative number": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Email is in a valid format": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify priority and service objects have required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Total price is a non-negative number": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Email is in a valid format": true,
+					"Verify priority and service objects have required fields": true,
+					"Total price is a non-negative number": true
+				}
+			]
+		},
+		{
+			"id": "481ef13f-9164-4bc8-a95f-5fb3a5c79aa0",
+			"name": "ById-OrderSubmission",
+			"url": "https://localhost:7162/api/OrderSubmission/65ba5b094b0c591ed39d0ebf",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response content type is application/json": true,
+				"Priority price is a non-negative number": true,
+				"Service price is a non-negative number": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response content type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Priority price is a non-negative number": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Service price is a non-negative number": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response content type is application/json": true,
+					"Priority price is a non-negative number": true,
+					"Service price is a non-negative number": true
+				}
+			]
+		},
+		{
+			"id": "b200bce2-c11e-425e-8023-149c540d2346",
+			"name": "ById-UpdateOrderSubmission",
+			"url": "https://localhost:7162/api/OrderSubmission/65ba5b094b0c591ed39d0eb5",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type is application/json": true,
+				"Response has the required fields": true,
+				"Validate the priority object - id, name, and price": true,
+				"Validate the service object - id, name, and price": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the priority object - id, name, and price": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the service object - id, name, and price": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type is application/json": true,
+					"Response has the required fields": true,
+					"Validate the priority object - id, name, and price": true,
+					"Validate the service object - id, name, and price": true
+				}
+			]
+		},
+		{
+			"id": "1425342f-b283-480d-96c5-ab6a07fcd6b5",
+			"name": "ById-CancelOrderSubmission",
+			"url": "https://localhost:7162/api/OrderSubmission/65ba5b094b0c591ed39d0eaf/cancel",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields": true,
+				"Total price is a non-negative number": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Total price is a non-negative number": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields": true,
+					"Total price is a non-negative number": true
+				}
+			]
+		},
+		{
+			"id": "571c8ad1-0b47-4dc3-bbbb-008c1323fece",
+			"name": "AssignOrderSubmissionToUser",
+			"url": "https://localhost:7162/api/OrderSubmission/65ba5b094b0c591ed39d0eb0/assign/65ba5b084b0c591ed39d0e94",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "f0e17374-fc41-4843-9bf2-b466f7fcb947",
+			"name": "UserUnlock",
+			"url": "https://localhost:7162/api/user/unlock",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response Content-Type is text/plain": true,
+				"Ensure that the response message is not empty": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response Content-Type is text/plain": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ensure that the response message is not empty": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response Content-Type is text/plain": true,
+					"Ensure that the response message is not empty": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 183,
+	"collection": {
+		"requests": [
+			{
+				"id": "314cc1cb-8114-49fe-8529-ac9a97375ab4",
+				"method": "POST"
+			},
+			{
+				"id": "f1591980-3c31-443c-bce2-eb5d6f842884",
+				"method": "DELETE"
+			},
+			{
+				"id": "150b95c8-8494-4a6d-92d1-e1c6b3491be0",
+				"method": "PUT"
+			},
+			{
+				"id": "6fa7c783-b5dc-4e87-8ca5-9430dbf28409",
+				"method": "POST"
+			},
+			{
+				"id": "b05a0527-d428-403c-b838-8df9ec40bb7f",
+				"method": "DELETE"
+			},
+			{
+				"id": "218e5d50-4c32-4850-87b7-f8e56ef8938e",
+				"method": "GET"
+			},
+			{
+				"id": "a4f220fa-9d81-4871-9f99-45fd4f345b68",
+				"method": "GET"
+			},
+			{
+				"id": "c29c7199-d1d0-45d6-b93a-ec5f61362ae7",
+				"method": "POST"
+			},
+			{
+				"id": "b0698c4a-1063-4135-b14c-f5c6448ae71d",
+				"method": "POST"
+			},
+			{
+				"id": "46605bc0-791f-4d7c-a5b7-1c4a82925196",
+				"method": "GET"
+			},
+			{
+				"id": "481ef13f-9164-4bc8-a95f-5fb3a5c79aa0",
+				"method": "GET"
+			},
+			{
+				"id": "b200bce2-c11e-425e-8023-149c540d2346",
+				"method": "PUT"
+			},
+			{
+				"id": "1425342f-b283-480d-96c5-ab6a07fcd6b5",
+				"method": "PUT"
+			},
+			{
+				"id": "571c8ad1-0b47-4dc3-bbbb-008c1323fece",
+				"method": "POST"
+			},
+			{
+				"id": "f0e17374-fc41-4843-9bf2-b466f7fcb947",
+				"method": "POST"
+			}
+		]
+	}
+}

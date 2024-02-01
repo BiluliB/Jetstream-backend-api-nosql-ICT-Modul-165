@@ -228,8 +228,8 @@ db.users.insertMany([
       ),
       0
     ),
-    password_input_attempt: 0,
-    is_locked: false,
+    password_input_attempt: 3,
+    is_locked: true,
     role: "USER",
   },
   {

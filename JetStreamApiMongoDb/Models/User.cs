@@ -11,10 +11,12 @@ namespace JetStreamApiMongoDb.Models
         public required string Name { get; set; }
 
         [BsonElement("password_hash")]
+        [BsonRepresentation(BsonType.Binary)]
         [AllowNull, NotNull]
         public byte[] PasswordHash { get; set; }
 
         [BsonElement("password_salt")]
+        [BsonRepresentation(BsonType.Binary)]
         [AllowNull, NotNull]
         public byte[] PasswordSalt { get; set; }
 
