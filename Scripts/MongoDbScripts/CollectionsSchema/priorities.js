@@ -11,6 +11,7 @@ db.createCollection("priorities", {
         },
         name: {
           bsonType: "string",
+          enum: ["Tief", "Standard", "Hoch"],
         },
         price: {
           bsonType: "double",

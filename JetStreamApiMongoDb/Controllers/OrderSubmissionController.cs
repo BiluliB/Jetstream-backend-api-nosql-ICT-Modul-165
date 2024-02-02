@@ -1,7 +1,6 @@
 ﻿using JetStreamApiMongoDb.DTOs.Requests;
 using JetStreamApiMongoDb.DTOs.Responses;
 using JetStreamApiMongoDb.Interfaces;
-using JetStreamApiMongoDb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -10,7 +9,6 @@ namespace JetStreamApiMongoDb.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
     public class OrderSubmissionController : ControllerBase
     {
         private readonly IOrderSubmissionService _orderSubmissionService;
@@ -22,6 +20,11 @@ namespace JetStreamApiMongoDb.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Creates a new order submission
+        /// </summary>
+        /// <param name="createDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(List<OrderSubmissionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -38,6 +41,10 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets all order submissions
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<OrderSubmissionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -58,6 +65,11 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets an order submission by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id:length(24)}")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -78,6 +90,12 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an order submission
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updateDTO"></param>
+        /// <returns></returns>
         [HttpPut("{id:length(24)}")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -103,6 +121,11 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Cancels an order submission
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("{id:length(24)}/cancel")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -127,6 +150,11 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes an order submission
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:length(24)}")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -149,6 +177,12 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Assigns an order submission to a user
+        /// </summary>
+        /// <param name="orderSubmissionId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost("{orderSubmissionId}/assign/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -165,6 +199,12 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an order submission
+        /// </summary>
+        /// <param name="orderSubmissionId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPut("{orderSubmissionId}/user/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -12,6 +12,14 @@ db.createCollection("services", {
         name: {
           bsonType: "string",
           maxLength: 50,
+          enum: [
+            "Grosser Service",
+            "Kleiner Service",
+            "Rennskiservice",
+            "Bindung montieren und einstellen",
+            "Fell zuschneiden",
+            "Heisswachsen",
+          ],
         },
         price: {
           bsonType: "double",

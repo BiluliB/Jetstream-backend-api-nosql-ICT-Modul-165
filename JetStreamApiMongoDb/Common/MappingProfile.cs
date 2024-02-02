@@ -5,6 +5,9 @@ using JetStreamApiMongoDb.Models;
 
 namespace JetStreamApiMongoDb.Common
 {
+    /// <summary>
+    /// Mapping profile for AutoMapper
+    /// </summary>
     public class MappingProfile : Profile
     {
         public MappingProfile()

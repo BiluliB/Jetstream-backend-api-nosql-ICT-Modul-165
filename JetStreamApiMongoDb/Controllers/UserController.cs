@@ -156,7 +156,7 @@ namespace JetStreamApiMongoDb.Controllers
             }
             catch (FormatException)
             {
-                return BadRequest("Invalid Id format.");
+                return BadRequest("Invalid Id format.");    
             }
             catch (InvalidOperationException ex)
             {

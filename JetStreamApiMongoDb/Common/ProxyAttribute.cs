@@ -1,5 +1,8 @@
 ﻿namespace JetStreamApiMongoDb.Common
 {
+    /// <summary>
+    /// Proxy attribute for MongoDB references to other collections
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public class ProxyAttribute : Attribute
     {

@@ -12,6 +12,7 @@ db.createCollection("statuses", {
         name: {
           bsonType: "string",
           maxLength: 50,
+          enum: ["Offen", "In Arbeit", "Erledigt", "Storniert"],
         },
       },
     },
