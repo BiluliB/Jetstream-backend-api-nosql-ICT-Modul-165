@@ -19,6 +19,13 @@ namespace JetStreamApiMongoDb.Services
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Create a new order submission
+        /// </summary>
+        /// <param name="createDTO"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
         public async Task<OrderSubmissionDTO> Create(OrderSubmissionCreateDTO createDTO)
         {
             var offenStatusList = await _context.Statuses.FindWithProxies(Builders<Status>.Filter.Eq(s => s.Name, "Offen"));
@@ -61,6 +68,10 @@ namespace JetStreamApiMongoDb.Services
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
+        /// <summary>
+        /// Gets all order submissions
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<OrderSubmissionDTO>> GetAll()
         {
             var orderSubmissions = await _context.OrderSubmissions.FindWithProxies(FilterDefinition<OrderSubmission>.Empty);
@@ -74,6 +85,13 @@ namespace JetStreamApiMongoDb.Services
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
+        /// <summary>
+        /// Updates an order submission
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updateDTO"></param>
+        /// <returns>OrderSubmissionDTO</returns>
+        /// <exception cref="InvalidOperationException">If order submission not found</exception>
         public async Task<OrderSubmissionDTO> Update(ObjectId id, OrderSubmissionUpdateDTO updateDTO)
         {
             var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
@@ -114,6 +132,12 @@ namespace JetStreamApiMongoDb.Services
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
+        /// <summary>
+        /// Cancels an order submission
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>OrderSubmissionDTO</returns>
+        /// <exception cref="InvalidOperationException">orderSubmission not found and status 'Storniert' not found</exception>
         public async Task<OrderSubmissionDTO> Cancel(ObjectId id)
         {
             var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
@@ -142,6 +166,12 @@ namespace JetStreamApiMongoDb.Services
             return _mapper.Map<OrderSubmissionDTO>(orderSubmission);
         }
 
+        /// <summary>
+        /// Deletes an order submission
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Order submission not found</exception>
         public async Task Delete(ObjectId id)
         {
             var orderSubmissionList = await _context.OrderSubmissions.FindWithProxies(Builders<OrderSubmission>.Filter.Eq("_id", id));
@@ -155,6 +185,13 @@ namespace JetStreamApiMongoDb.Services
             await _context.OrderSubmissions.DeleteOneAsync(id);
         }
 
+        /// <summary>
+        /// Assigns an order submission to a user
+        /// </summary>
+        /// <param name="orderSubmissionId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException">User not found and order submission not found</exception>
         public async Task AssignOrderSubmissionToUser(string orderSubmissionId, string userId)
         {
             var orderSubmissionObjectId = new ObjectId(orderSubmissionId);
@@ -179,6 +216,13 @@ namespace JetStreamApiMongoDb.Services
             await _context.OrderSubmissions.ReplaceOneAsync(orderSubmission);
         }
 
+        /// <summary>
+        /// Updates an order submission
+        /// </summary>
+        /// <param name="orderSubmissionId"></param>
+        /// <param name="newUserId"></param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException">user not found and order submission not found</exception>
         public async Task UpdateOrderSubmission(string orderSubmissionId, string newUserId)
         {
             var orderSubmissionObjectId = new ObjectId(orderSubmissionId);

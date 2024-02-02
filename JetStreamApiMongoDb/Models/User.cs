@@ -5,6 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace JetStreamApiMongoDb.Models
 {
+    /// <summary>
+    /// Model for user
+    /// </summary>
     public class User : BaseModel
     {
         [BsonElement("name")]

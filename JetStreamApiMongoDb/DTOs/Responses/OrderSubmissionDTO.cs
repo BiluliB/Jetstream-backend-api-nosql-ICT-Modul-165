@@ -5,6 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace JetStreamApiMongoDb.DTOs.Responses
 {
+    /// <summary>
+    /// DTO for order submission
+    /// </summary>
     public class OrderSubmissionDTO
     {
         [AllowNull, NotNull]

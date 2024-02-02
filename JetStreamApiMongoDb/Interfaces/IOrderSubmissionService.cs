@@ -4,6 +4,9 @@ using MongoDB.Bson;
 
 namespace JetStreamApiMongoDb.Interfaces
 {
+    /// <summary>
+    /// Interface for order submission service
+    /// </summary>
     public interface IOrderSubmissionService
     {
         Task<OrderSubmissionDTO> Create(OrderSubmissionCreateDTO orderSubmissionCreateDTO);

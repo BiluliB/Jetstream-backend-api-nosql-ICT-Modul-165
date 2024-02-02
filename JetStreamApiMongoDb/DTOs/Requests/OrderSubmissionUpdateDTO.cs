@@ -2,6 +2,9 @@
 
 namespace JetStreamApiMongoDb.DTOs.Requests
 {
+    /// <summary>
+    /// DTO for updating an order submission
+    /// </summary>
     public class OrderSubmissionUpdateDTO
     {
         [MaxLength(50)]

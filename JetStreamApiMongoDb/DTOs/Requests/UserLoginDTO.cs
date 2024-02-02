@@ -2,6 +2,9 @@
 
 namespace JetStreamApiMongoDb.DTOs.Requests
 {
+    /// <summary>
+    /// DTO for user login
+    /// </summary>
     public class UserLoginDTO
     {
         [Required]

@@ -26,8 +26,13 @@ namespace JetStreamApiMongoDb.Data
                 _database.CreateCollection(collectionName);                
             }
             _collection = _database.GetCollection<T>(collectionName);          
-        }        
+        }
 
+        /// <summary>
+        /// Finds all entities in the collection and returns them as a list.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>list</returns>
         public async Task<List<T>> FindWithProxies(FilterDefinition<T> filter)
         {
             var aggregation = _collection.Aggregate<T>()
@@ -70,39 +75,73 @@ namespace JetStreamApiMongoDb.Data
             return list;
         }
 
+        /// <summary>
+        /// Seeds the database with the given entities and returns their ids.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns>entities.Select(x => x.Id).ToList()</returns>
         public async Task<List<ObjectId>> SeedDatabase(IEnumerable<T> entities)
         {
             await _collection.InsertManyAsync(entities);
             return entities.Select(x => x.Id).ToList();
         }
 
+        /// <summary>
+        /// Adds a proxy to the collection.
+        /// </summary>
+        /// <returns>await _collection.InsertOneAsync(entity)</returns>
         public async Task<bool> Any()
         {
             return await _collection.CountDocumentsAsync(FilterDefinition<T>.Empty) > 0;
         }
 
+        /// <summary>
+        /// Inserts a single entity into the collection.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public async Task InsertOneAsync(T entity)
         {
             await _collection.InsertOneAsync(entity);
         }
 
+        /// <summary>
+        /// Finds a user by username.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns>result.FirstOrDefault()</returns>
         public async Task<T> FindByUsernameAsync(string username)
         {
             var result = await FindWithProxies(Builders<T>.Filter.Eq("name", username));
             return result.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Finds a user by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>result.FirstOrDefault()</returns>
         public async Task<T> FindByIdAsync(ObjectId id)
         {
             var result = await FindWithProxies(Builders<T>.Filter.Eq("_id", id));
             return result.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Replaces an entity in the collection with the given entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public async Task ReplaceOneAsync(T entity)
         {
             await _collection.ReplaceOneAsync(x => x.Id == entity.Id, entity);
         }
 
+        /// <summary>
+        /// Deletes an entity from the collection by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task DeleteOneAsync(ObjectId id)
         {
             await _collection.DeleteOneAsync(x => x.Id == id);

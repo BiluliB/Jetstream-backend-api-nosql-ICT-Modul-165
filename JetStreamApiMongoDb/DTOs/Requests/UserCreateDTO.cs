@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JetStreamApiMongoDb.DTOs.Requests
 {
+    /// <summary>
+    /// DTO for creating a new user
+    /// </summary>
     public class UserCreateDTO
     {
         [Required]

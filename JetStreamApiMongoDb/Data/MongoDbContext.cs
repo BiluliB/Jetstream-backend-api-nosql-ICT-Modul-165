@@ -23,12 +23,21 @@ namespace JetStreamApiMongoDb.Data
 
             //SeedDatabase().Wait();
         }
+        /// <summary>
+        /// Collection wrappers for the different entities in the database.
+        /// </summary>
         public CollectionWrapper<OrderSubmission> OrderSubmissions => new(_mapper, _database, "order_submissions");
         public CollectionWrapper<User> Users => new(_mapper, _database, "users");
         public CollectionWrapper<Service> Services => new(_mapper, _database, "services");
         public CollectionWrapper<Status> Statuses => new(_mapper, _database, "statuses");
         public CollectionWrapper<Priority> Priorities => new(_mapper, _database, "priorities");
 
+        /// <summary>
+        /// Gets the collection wrapper for the given type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Get Collection Wrapper</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public CollectionWrapper<T> Get<T>()
             where T : BaseModel
         {

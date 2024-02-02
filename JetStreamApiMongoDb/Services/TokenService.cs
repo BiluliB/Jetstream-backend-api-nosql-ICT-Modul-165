@@ -6,6 +6,9 @@ using System.Text;
 
 namespace JetStreamApiMongoDb.Services
 {
+    /// <summary>
+    /// Service for token
+    /// </summary>
     public class TokenService : ITokenService
     {
         private readonly SymmetricSecurityKey _key;
@@ -14,6 +17,12 @@ namespace JetStreamApiMongoDb.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
         }
 
+        /// <summary>
+        /// Generate token
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="role"></param>
+        /// <returns>token</returns>
         public string GenerateToken(string username, string role)
         {
             var claims = new List<Claim>

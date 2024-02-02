@@ -2,6 +2,9 @@
 
 namespace JetStreamApiMongoDb.DTOs.Requests
 {
+    /// <summary>
+    /// DTO for creating a new order submission
+    /// </summary>
     public class OrderSubmissionCreateDTO
     {
         [Required]
@@ -17,7 +20,7 @@ namespace JetStreamApiMongoDb.DTOs.Requests
         public string? Email { get; set; }
 
         [Required]
-        [RegularExpression(@"^(\+\d{1,3}[- ]?)?\d{10}$", ErrorMessage = "Invalid phone number")]
+        [RegularExpression(@"^(\+\d{1,3}[- ]?)?\d{15}$", ErrorMessage = "Invalid phone number")]
         public string? Phone { get; set; }
 
         [Required]

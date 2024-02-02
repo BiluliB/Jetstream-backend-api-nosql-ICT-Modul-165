@@ -20,6 +20,11 @@ namespace JetStreamApiMongoDb.Controllers
             _tokenService = tokenService;
         }
 
+        /// <summary>
+        /// Authenticates a user and returns a token.
+        /// </summary>
+        /// <param name="userLoginDTO"></param>
+        /// <returns>Ok, Unauthorized, BadRequest, StatusCode</returns>
         [HttpPost("authenticate")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserLoginDTO))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -51,6 +56,11 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <param name="userCreateDTO"></param>
+        /// <returns>Ok,BadRequest</returns>
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserCreateDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -68,6 +78,11 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Unlocks a user.
+        /// </summary>
+        /// <param name="userUnlockDTO"></param>
+        /// <returns>Ok, BadRequest, StatusCode</returns>
         [HttpPost("unlock")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserUnlockDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -90,6 +105,10 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets all users.
+        /// </summary>
+        /// <returns>Not Found, userDTO, BadRequest, Invalid Id format</returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<UserDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -111,6 +130,11 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a user by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Not Found, userDTO, BadRequest, Invalid Id format</returns>
         [HttpGet("{id:length(24)}")]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -132,6 +156,11 @@ namespace JetStreamApiMongoDb.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a user by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Invalid Id format and ex.Message</returns>
         [HttpDelete("{id:length(24)}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

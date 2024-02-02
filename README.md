@@ -73,6 +73,20 @@ Das Skript `UsersAndRoles.js` wird vom `create.ps1` ausgeführt nachfolgende Ope
 
 ### Backup und Restore der Datenbank
 
+Das Backup und der Restore wird mit dem jeweiligen PowerShell Skript duchgeführt, sie liegen im Scripts Ordner.
+
+Backup Skript: `backup.ps1`
+
+Bei Ausführung des Backup Skript wird im Projektverzeichnis ein Backups Ordner erstellt. das dann die Backups jeweils in einen Ordner mit dem Datenbanknamen und Datum erstellt.
+
+Restore Skript: `restore.ps1`
+
+Bei Ausführung des Restore Skript werden alle Backups aufgelistet und der Nutzer kann das gewünschte Backup auswählen was dann ausgeführt wird um die Datenbank wiederherzustellen.
+
+### Automatisiertes Backup
+
+Das Automatisierte Backup wird mit dem `createScheduledTask.ps1` PowerShell Skript erstellt. Im Windows Scheduler wird ein Task erstellt der Täglich um 4:00 Uhr morgens das `backup.ps1` ausführt um das Backup zu erstellen.
+
 ## Starten der Anwendung:
 
 - Starten Sie die Anwendung über Ihre Entwicklungsumgebung.

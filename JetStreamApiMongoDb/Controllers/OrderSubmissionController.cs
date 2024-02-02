@@ -24,7 +24,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// Creates a new order submission
         /// </summary>
         /// <param name="createDTO"></param>
-        /// <returns></returns>
+        /// <returns>CreateAtAction, BadRequest</returns>
         [HttpPost]
         [ProducesResponseType(typeof(List<OrderSubmissionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -44,7 +44,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// <summary>
         /// Gets all order submissions
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Not Found, Ok, BadRequest</returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<OrderSubmissionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -69,7 +69,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// Gets an order submission by id
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>Not Found, Ok, BadRequest</returns>
         [HttpGet("{id:length(24)}")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -95,7 +95,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <param name="updateDTO"></param>
-        /// <returns></returns>
+        /// <returns>Not Found, Ok, BadRequest, StatusCode</returns>
         [HttpPut("{id:length(24)}")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -125,7 +125,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// Cancels an order submission
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>Not Found, Ok</returns>
         [HttpPut("{id:length(24)}/cancel")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -154,7 +154,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// Deletes an order submission
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>Ok, NotFound, StatusCode</returns>
         [HttpDelete("{id:length(24)}")]
         [ProducesResponseType(typeof(OrderSubmissionDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -182,7 +182,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// </summary>
         /// <param name="orderSubmissionId"></param>
         /// <param name="userId"></param>
-        /// <returns></returns>
+        /// <returns>Ok, NotFound</returns>
         [HttpPost("{orderSubmissionId}/assign/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -204,7 +204,7 @@ namespace JetStreamApiMongoDb.Controllers
         /// </summary>
         /// <param name="orderSubmissionId"></param>
         /// <param name="userId"></param>
-        /// <returns></returns>
+        /// <returns>Ok, NotFound</returns>
         [HttpPut("{orderSubmissionId}/user/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

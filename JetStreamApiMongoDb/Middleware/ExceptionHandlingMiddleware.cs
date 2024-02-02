@@ -1,5 +1,8 @@
 ﻿namespace JetStreamApiMongoDb.Middleware
 {
+    /// <summary>
+    /// Middleware for exception handling
+    /// </summary>
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
@@ -9,6 +12,11 @@
             _next = next;
         }
 
+        /// <summary>
+        /// Invoke method for exception handling
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
             try
