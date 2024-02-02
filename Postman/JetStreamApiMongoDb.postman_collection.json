@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "45b3f302-d09f-42ff-844d-d771c33fb0a8",
 		"name": "JetStreamApiMongoDb",
+		"description": "This Postman collection, named **JetStreamApiMongoDb**, is designed to interact with a backend system, presumably for managing users and order submissions. It consists of various API calls to authenticate users, register new users, manage order submissions, and manipulate user states. Below is an overview of the included requests and their purposes:\n\n### Authentication and User Management\n\n- **AdminAuthenticate**: Authenticates an admin user and stores the returned token for subsequent requests.\n- **UserAuthenticate**: Authenticates a regular user and stores the token similarly.\n- **UserRegister**: Registers a new user with a username, password, and role.\n- **UserUnlock**: Unlocks a user account, presumably after it has been locked due to failed login attempts or other security reasons.\n- **ById-User**: Contains two requests with the same name but different methods (DELETE and GET), used to delete a user by ID and retrieve user details by ID, respectively.\n- **All-User**: Retrieves a list of all users, along with their details.\n    \n\n### Order Submission Management\n\n- **NewOrderSubmission**: Creates a new order with details such as names, contact information, service and priority IDs, dates, and comments.\n- **ById-OrderSubmission**: Includes two requests, one for retrieving and another for deleting an order by its ID.\n- **All-OrderSubmission**: Retrieves a list of all orders along with their details.\n- **ChangeOrderSubmissionToUser**: Changes the user associated with an order submission.\n- **AssignOrderSubmissionToUser**: Assigns an order submission to a specific user.\n- **ById-UpdateOrderSubmission**: Updates the details of an existing order submission by its ID.\n- **ById-CancelOrderSubmission**: Cancels an order submission by its ID.\n    \n\n### Authorization\n\nThe collection uses Bearer Token authentication for securing API requests. Tokens acquired during user authentication (AdminAuthenticate or UserAuthenticate) are stored and used in subsequent API calls.\n\n### Event Listeners\n\nThere are placeholders for pre-request and test scripts at the collection level, indicating that custom logic can be executed before sending a request or after receiving a response.\n\n### Variables\n\nTwo variables are defined:\n\n- **host**: The base URL of the API (`https://localhost:7162` by default).\n- **token**: Used to store the authentication token received from the AdminAuthenticate or UserAuthenticate requests.\n    \n\n### Usage\n\nTo use this collection:\n\n1. Import it into Postman.\n2. Ensure the **host** variable is set correctly for your environment.\n3. Start by authenticating as an admin or user to obtain a token.\n4. Use the token for authenticated requests as required.\n    \n\nThis collection facilitates comprehensive testing and interaction with a system managing users and orders, showcasing a mix of CRUD operations, authentication mechanisms, and dynamic data handling through Postman variables and scripts.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29156451"
 	},
@@ -132,6 +133,15 @@
 			"request": {
 				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstname\": \"string\",\r\n  \"lastname\": \"string\",\r\n  \"email\": \"user@example.com\",\r\n  \"phone\": \"+92841834393\",\r\n  \"priorityId\": \"string\",\r\n  \"createDate\": \"2024-02-01T16:02:12.268Z\",\r\n  \"pickupDate\": \"2024-02-01T16:02:12.268Z\",\r\n  \"serviceId\": \"string\",\r\n  \"totalPrice_CHF\": 0,\r\n  \"statusId\": \"string\",\r\n  \"comment\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "{{host}}/api/OrderSubmission/65ba5b094b0c591ed39d0eb0/user/65ba5b084b0c591ed39d0e97",
 					"host": [

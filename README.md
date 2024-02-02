@@ -46,7 +46,7 @@ Befolgen Sie diese Schritte, um die MongoDB-Datenbank korrekt einzurichten und z
 
 1. **Ausführen des PowerShell-Skripts (`create.ps1`)**:
 
-   - Dieses Skript Migriert automatisiert die SQL Datenbank zur MongoDB NoSQL Datenbank, sie wird bereinigt, die Sammlungen und Schemas, das Seeding von Daten sowie die Benutzer- und Rollenerstellung werden in MongoDB erstellt.
+   - Das `create.ps1` Skript führt eine automatisierte Migration der SQL-Datenbank zur MongoDB NoSQL-Datenbank durch. Dabei wird die Datenbank bereinigt und die Sammlungen und Schemas in MongoDB erstellt. Zusätzlich werden das Seeding von Daten sowie die Erstellung von Benutzern und Rollen in MongoDB durchgeführt.
    - Führen Sie dieses Skript aus, um die MongoDB-Datenbank mit den notwendigen Sammlungen und Benutzerrollen zu initialisieren.
 
 2. **MongoDB-Sammlungsschemas**:

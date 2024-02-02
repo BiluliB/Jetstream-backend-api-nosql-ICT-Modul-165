@@ -76,17 +76,6 @@ namespace JetStreamApiMongoDb.Data
         }
 
         /// <summary>
-        /// Seeds the database with the given entities and returns their ids.
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns>entities.Select(x => x.Id).ToList()</returns>
-        public async Task<List<ObjectId>> SeedDatabase(IEnumerable<T> entities)
-        {
-            await _collection.InsertManyAsync(entities);
-            return entities.Select(x => x.Id).ToList();
-        }
-
-        /// <summary>
         /// Adds a proxy to the collection.
         /// </summary>
         /// <returns>await _collection.InsertOneAsync(entity)</returns>

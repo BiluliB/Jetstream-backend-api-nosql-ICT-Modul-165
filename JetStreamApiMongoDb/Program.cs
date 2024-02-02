@@ -101,8 +101,6 @@ namespace JetStreamApiMongoDb
 
             app.MapControllers();
 
-            //await DatabaseSeeder.SeedDatabase(app.Services);
-
             app.Run();
         }
     }
